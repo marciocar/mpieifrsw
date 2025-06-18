@@ -1,4 +1,5 @@
-import initSqlJs, { Database } from 'sql.js';
+import * as sqlJs from 'sql.js';
+import { Database } from 'sql.js';
 import { SurveyResponse, SurveyFormData } from '../types/survey';
 
 // Instância do banco de dados
@@ -14,7 +15,7 @@ const initDatabase = async (): Promise<Database> => {
   
   try {
     // Inicializar sql.js
-    SQL = await initSqlJs({
+    SQL = await sqlJs.default({
       // Carregar o wasm do CDN
       locateFile: (file: string) => `https://sql.js.org/dist/${file}`
     });
