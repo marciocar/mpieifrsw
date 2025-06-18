@@ -1,10 +1,10 @@
-# 🎓 Oficina de DesEnvolvimento com IA - MPIE IFERS
+# 🎓 Oficina de DesEnvolvimento com IA - MPIE IFRS
 
 ![Oficina de DesEnvolvimento com IA](./assets/oficina-de-des-envolvimento-com-IA.png)
 
 ## 🙏 Agradecimentos Especiais
 
-Este workshop foi possível graças ao convite dos **professores excepcionais** do MPIE-IFERS:
+Este workshop foi possível graças ao convite dos **professores excepcionais** do MPIE-IFRS:
 
 ### 👩‍🏫 **Profa. Dra. Silvia de Castro Bertagnolli**
 Coordenadora visionária que sempre apoia iniciativas inovadoras em tecnologia educacional.
@@ -19,7 +19,7 @@ Pesquisador dedicado que sempre busca conectar teoria e prática no desenvolvime
 
 ## 💝 Uma Declaração de Amor ao MPIE
 
-O **MPIE - Mestrado Profissional em Informática na Educação** do IFERS não é apenas um programa acadêmico, é uma **comunidade transformadora** que forma profissionais capazes de revolucionar a educação através da tecnologia.
+O **MPIE - Mestrado Profissional em Informática na Educação** do IFRS não é apenas um programa acadêmico, é uma **comunidade transformadora** que forma profissionais capazes de revolucionar a educação através da tecnologia.
 
 ### 🌟 **Por que o MPIE é Especial:**
 - 🎯 **Foco na Prática**: Cada projeto tem aplicação real no mundo educacional
@@ -27,9 +27,6 @@ O **MPIE - Mestrado Profissional em Informática na Educação** do IFERS não �
 - 🚀 **Inovação Constante**: Sempre na vanguarda das tecnologias educacionais
 - 🤝 **Comunidade Acolhedora**: Ambiente colaborativo e inspirador
 - 📚 **Pesquisa Aplicada**: Conhecimento que transforma realidades
-
-### ❤️ **Meu Carinho pelos Docentes:**
-Cada professor do MPIE é um **mentor excepcional** que dedica sua vida a formar profissionais capazes de transformar a educação. O carinho, a dedicação e a excelência acadêmica que encontrei aqui são únicos e inspiradores.
 
 ---
 
@@ -41,7 +38,7 @@ Caro(a) mestrando(a), você está prestes a embarcar na **quest mais importante*
 
 ### 🎯 **OBJETIVOS DA QUEST:**
 
-#### 🥉 **NÍVEL BRONZE - Ideação (Semanas 1-4)**
+#### 🥉 **NÍVEL BRONZE - Ideação**
 - [ ] **Identificar o Problema**: Qual dor educacional você quer resolver?
 - [ ] **Definir o Público**: Quem são seus "usuários finais"?
 - [ ] **Mapear Recursos**: Que tecnologias você dominará?
@@ -49,7 +46,7 @@ Caro(a) mestrando(a), você está prestes a embarcar na **quest mais importante*
 
 **🎁 RECOMPENSA:** Clareza sobre seu propósito e direção!
 
-#### 🥈 **NÍVEL PRATA - Prototipagem (Semanas 5-12)**
+#### 🥈 **NÍVEL PRATA - Prototipagem**
 - [ ] **MVP Funcional**: Primeira versão que resolve o problema core
 - [ ] **Testes com Usuários**: Feedback real de educadores/estudantes
 - [ ] **Iterações Rápidas**: Melhorias baseadas em dados
@@ -57,7 +54,7 @@ Caro(a) mestrando(a), você está prestes a embarcar na **quest mais importante*
 
 **🎁 RECOMPENSA:** Produto testado e validado por usuários reais!
 
-#### 🥇 **NÍVEL OURO - Impacto (Semanas 13-24)**
+#### 🥇 **NÍVEL OURO - Impacto**
 - [ ] **Implementação Real**: Uso efetivo em ambiente educacional
 - [ ] **Métricas de Sucesso**: Dados que comprovam o impacto
 - [ ] **Escalabilidade**: Potencial para crescer e atingir mais pessoas
@@ -111,26 +108,6 @@ Caro(a) mestrando(a), você está prestes a embarcar na **quest mais importante*
 - Competições educacionais
 - Progressão por níveis
 
-### 🏅 **SISTEMA DE CONQUISTAS:**
-
-#### 🌟 **Conquistas Técnicas**
-- **"Primeiro Deploy"**: Colocar algo no ar pela primeira vez
-- **"Bug Hunter"**: Resolver 50 bugs sem desistir
-- **"Performance Master"**: Otimizar carregamento para <3s
-- **"Mobile Friendly"**: Interface perfeita em qualquer dispositivo
-
-#### 🎯 **Conquistas de Impacto**
-- **"Primeiro Usuário"**: Alguém usar seu produto voluntariamente
-- **"Feedback Positivo"**: Receber elogio espontâneo de usuário
-- **"Problema Resolvido"**: Evidência de que sua solução funciona
-- **"Viral Educacional"**: Outros educadores recomendarem seu produto
-
-#### 🚀 **Conquistas de Mestrado**
-- **"Orientador Orgulhoso"**: Seu orientador se emocionar com o resultado
-- **"Banca Impressionada"**: Defesa que gera aplausos espontâneos
-- **"Publicação Aceita"**: Artigo aprovado em evento/revista
-- **"Legado Criado"**: Produto que continua sendo usado após a defesa
-
 ### 💡 **DICAS DE ESTRATÉGIA:**
 
 #### 🎯 **Foque no Problema, Não na Tecnologia**
@@ -153,12 +130,6 @@ Caro(a) mestrando(a), você está prestes a embarcar na **quest mais importante*
 - Dados qualitativos são tão importantes quanto quantitativos
 - Impacto educacional > métricas de vaidade
 
-### 🎊 **CELEBRE CADA VITÓRIA!**
-
-Lembre-se: você não está apenas fazendo um mestrado, está **criando soluções que podem transformar a educação brasileira**. Cada linha de código, cada teste com usuário, cada iteração é um passo em direção a um futuro educacional melhor.
-
-**Sua jornada no MPIE é épica. Seu produto será seu legado. Vamos criar algo incrível juntos! 🚀**
-
 ---
 
 ## 📊 Pesquisa de Impacto dos Emojis
@@ -177,7 +148,6 @@ Uma plataforma interativa de pesquisa desenvolvida para analisar o impacto dos e
 - **Validação em tempo real** dos campos obrigatórios
 - **Salvamento automático** de rascunhos no localStorage
 - **Design responsivo** otimizado para desktop e mobile
-- **Feedback visual** com animações e transições suaves
 
 ### 📈 Dashboard Analítico
 - **Visualizações interativas** usando Chart.js
@@ -189,13 +159,11 @@ Uma plataforma interativa de pesquisa desenvolvida para analisar o impacto dos e
   - Análise por faixa etária
 - **Exportação de dados** em formato CSV
 - **Compartilhamento de resultados** via link ou email
-- **Atualização automática** dos dados
 
 ### 🎨 Design System
 - **Paleta Ferrari** (vermelho, amarelo, preto)
 - **Componentes modulares** e reutilizáveis
 - **Animações fluidas** e micro-interações
-- **Tipografia hierárquica** para melhor legibilidade
 - **Sistema de espaçamento** consistente (8px grid)
 
 ## 🛠️ Tecnologias Utilizadas
@@ -434,7 +402,7 @@ Para dúvidas sobre o projeto ou workshop:
 
 > *"No MPIE, não formamos apenas mestres em tecnologia educacional. Formamos **agentes de transformação** que usam a tecnologia para criar um futuro educacional mais inclusivo, eficiente e inspirador."*
 
-**Desenvolvido com ❤️ durante a Oficina de DesEnvolvimento com IA - MPIE IFERS**
+**Desenvolvido com ❤️ durante a Oficina de DesEnvolvimento com IA - MPIE IFRS**
 
 *"Faço o protótipo do seu produto de mestrado em 3 horas"* - Marcio Carvalho
 
