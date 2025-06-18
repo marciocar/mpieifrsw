@@ -16,8 +16,10 @@ import { getResponses, exportToCSV } from '../utils/storage';
 import { getResponseDistribution, getAgeGroupDistribution, getGenderDistribution, getTemporalTrends } from '../utils/analytics';
 import { SurveyResponse } from '../types/survey';
 import { BarChart3, Download, Users, TrendingUp, RefreshCw } from 'lucide-react';
+import { Share2 } from 'lucide-react';
 import { Toast } from './Toast';
 import { useToast } from '../hooks/useToast';
+import { ShareModal } from './ShareModal';
 
 ChartJS.register(
   CategoryScale,
@@ -38,6 +40,7 @@ interface DashboardProps {
 export const Dashboard: React.FC<DashboardProps> = ({ onStartSurvey }) => {
   const [responses, setResponses] = useState<SurveyResponse[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const { toast, showToast, hideToast } = useToast();
 
   const loadData = () => {
@@ -66,6 +69,18 @@ export const Dashboard: React.FC<DashboardProps> = ({ onStartSurvey }) => {
       );
     }
   };
+
+  const handleShare = () => {
+    setIsShareModalOpen(true);
+  };
+
+  const getShareData = () => ({
+    totalResponses: responses.length,
+    positiveImpact: responseDistribution.positive,
+    neutralImpact: responseDistribution.neutral,
+    negativeImpact: responseDistribution.negative
+  });
+
   const responseDistribution = getResponseDistribution(responses);
   const ageGroupDistribution = getAgeGroupDistribution(responses);
   const genderDistribution = getGenderDistribution(responses);
@@ -213,6 +228,14 @@ export const Dashboard: React.FC<DashboardProps> = ({ onStartSurvey }) => {
               Exportar CSV
             </button>
             <button
+              onClick={handleShare}
+              disabled={responses.length === 0}
+              className="flex items-center px-4 py-2 text-blue-600 bg-blue-50 border border-blue-300 rounded-lg hover:bg-blue-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+            >
+              <Share2 className="w-4 h-4 mr-2" />
+              Compartilhar
+            </button>
+            <button
               onClick={onStartSurvey}
               className="flex items-center px-6 py-2 text-white bg-gradient-to-r from-red-600 to-red-700 rounded-lg hover:from-red-700 hover:to-red-800 transition-all duration-200 shadow-lg"
             >
@@ -328,6 +351,12 @@ export const Dashboard: React.FC<DashboardProps> = ({ onStartSurvey }) => {
         type={toast.type}
         isVisible={toast.isVisible}
         onClose={hideToast}
+      />
+      
+      <ShareModal
+        isOpen={isShareModalOpen}
+        onClose={() => setIsShareModalOpen(false)}
+        shareData={getShareData()}
       />
     </div>
   );
