@@ -97,7 +97,9 @@ export const SharedView: React.FC<SharedViewProps> = ({ shareData, onViewFullDas
   // Calcular percentuais atuais (com proteção contra divisão por zero)
   const currentPositivePercentage = currentResponses.length > 0 
     ? Math.round((currentDistribution.positive / currentResponses.length) * 100)
-    : 0;
+    : shareData.totalResponses > 0 
+      ? Math.round((shareData.positiveImpact / shareData.totalResponses) * 100)
+      : 0;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-yellow-50 p-4">
@@ -238,7 +240,7 @@ export const SharedView: React.FC<SharedViewProps> = ({ shareData, onViewFullDas
             </div>
             <div className="text-center bg-white rounded-lg p-4">
               <div className="text-2xl font-bold text-green-600">
-                {currentResponses.length > 0 ? currentPositivePercentage : 'N/A'}%
+                {currentPositivePercentage}%
               </div>
               <div className="text-green-700">Impacto Positivo Atual</div>
             </div>
