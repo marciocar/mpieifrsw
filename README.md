@@ -4,7 +4,7 @@
 
 ## 🙏 Agradecimentos Especiais
 
-Esta oficina foi possível graças ao convite dos **professores excepcionais** do MPIE-IFRS:
+Nesta oficina foi possível graças ao convite dos **professores excepcionais** do MPIE-IFRS:
 
 ### 👩‍🏫 **Profa. Dra. Silvia de Castro Bertagnolli**
 ### 👨‍🏫 **Prof. Dr. Fabio Yoshimitsu Okuyama** 
