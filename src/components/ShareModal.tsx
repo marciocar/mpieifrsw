@@ -43,35 +43,70 @@ export const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, shareDa
       return;
     }
 
-    try {
-      const subject = encodeURIComponent('Resultados da Pesquisa de Impacto dos Emojis');
-      const body = encodeURIComponent(
-        `Olá!\n\nGostaria de compartilhar os resultados da nossa pesquisa sobre o impacto dos emojis na comunicação digital:\n\n` +
-        `📊 Total de Respostas: ${shareData.totalResponses}\n` +
-        `✅ Impacto Positivo: ${shareData.positiveImpact}\n` +
-        `⚪ Impacto Neutro: ${shareData.neutralImpact}\n` +
-        `❌ Impacto Negativo: ${shareData.negativeImpact}\n\n` +
-        `Veja os resultados completos em: ${shareUrl}\n\n` +
-        `Atenciosamente,\nEquipe de Pesquisa`
-      );
+    // Criar o conteúdo do email
+    const subject = 'Resultados da Pesquisa de Impacto dos Emojis';
+    const emailBody = `Olá!
 
-      const mailtoUrl = `mailto:${email}?subject=${subject}&body=${body}`;
+Gostaria de compartilhar os resultados da nossa pesquisa sobre o impacto dos emojis na comunicação digital:
+
+📊 Total de Respostas: ${shareData.totalResponses}
+✅ Impacto Positivo: ${shareData.positiveImpact}
+⚪ Impacto Neutro: ${shareData.neutralImpact}
+❌ Impacto Negativo: ${shareData.negativeImpact}
+
+Veja os resultados completos em: ${shareUrl}
+
+Atenciosamente,
+Equipe de Pesquisa`;
+
+    // Tentar diferentes métodos de abertura
+    const tryOpenEmail = () => {
+      const encodedSubject = encodeURIComponent(subject);
+      const encodedBody = encodeURIComponent(emailBody);
+      const mailtoUrl = `mailto:${email}?subject=${encodedSubject}&body=${encodedBody}`;
       
-      // Tentar abrir o cliente de email
-      const link = document.createElement('a');
-      link.href = mailtoUrl;
-      link.target = '_blank';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      // Método 1: Tentar window.open
+      const emailWindow = window.open(mailtoUrl, '_self');
       
-      // Mostrar feedback de sucesso
-      alert('Cliente de email aberto! Se não abriu automaticamente, copie o link compartilhável e envie manualmente.');
-      
-    } catch (error) {
-      console.error('Erro ao abrir cliente de email:', error);
-      alert('Não foi possível abrir o cliente de email. Por favor, copie o link compartilhável e envie manualmente.');
+      // Se não funcionar, tentar método alternativo
+      setTimeout(() => {
+        if (!emailWindow || emailWindow.closed) {
+          // Método 2: Criar link temporário
+          const tempLink = document.createElement('a');
+          tempLink.href = mailtoUrl;
+          tempLink.style.display = 'none';
+          document.body.appendChild(tempLink);
+          tempLink.click();
+          document.body.removeChild(tempLink);
+        }
+      }, 100);
+    };
+
+    // Detectar se é mobile ou desktop
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    
+    if (isMobile) {
+      // Em mobile, usar método direto
+      const encodedSubject = encodeURIComponent(subject);
+      const encodedBody = encodeURIComponent(emailBody);
+      window.location.href = `mailto:${email}?subject=${encodedSubject}&body=${encodedBody}`;
+    } else {
+      // Em desktop, tentar abrir
+      tryOpenEmail();
     }
+
+    // Mostrar instruções alternativas
+    setTimeout(() => {
+      alert(`📧 Tentativa de abertura do email realizada!
+
+Se o seu cliente de email não abriu:
+1. Copie o link compartilhável acima
+2. Abra seu email manualmente (Gmail, Outlook, etc.)
+3. Cole o link na mensagem
+4. Envie para: ${email}
+
+💡 Dica: Funciona melhor com clientes instalados (Outlook, Apple Mail, Thunderbird)`);
+    }, 500);
   };
 
   if (!isOpen) return null;
@@ -147,11 +182,13 @@ export const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, shareDa
           {/* Envio por Email */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Compartilhar por Email:
+              Enviar por Email:
             </label>
-            <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-3">
-              <p className="text-sm text-amber-700">
-                💡 <strong>Como funciona:</strong> Ao clicar em "Abrir Email", seu cliente de email padrão será aberto com uma mensagem pré-formatada. Se não funcionar, copie o link acima e envie manualmente.
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-3">
+              <p className="text-sm text-blue-700">
+                <strong>📱 Mobile:</strong> Abrirá o app de email do seu celular<br/>
+                <strong>💻 Desktop:</strong> Tentará abrir seu cliente padrão (Outlook, Apple Mail, etc.)<br/>
+                <strong>🌐 Se não funcionar:</strong> Copie o link acima e envie manualmente
               </p>
             </div>
             <div className="space-y-3">
@@ -165,7 +202,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, shareDa
               <button
                 onClick={handleSendEmail}
                 disabled={!email}
-                className="w-full flex items-center justify-center px-4 py-3 bg-gradient-to-r from-yellow-500 to-yellow-600 text-white rounded-lg hover:from-yellow-600 hover:to-yellow-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+                className="w-full flex items-center justify-center px-4 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
               >
                 <Mail className="w-4 h-4 mr-2" />
                 Abrir Cliente de Email
@@ -174,14 +211,15 @@ export const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, shareDa
           </div>
 
           {/* Informações Adicionais */}
-          <div className="bg-blue-50 rounded-lg p-4">
-            <h4 className="font-medium text-blue-800 mb-2">💡 Como funciona:</h4>
-            <ul className="text-sm text-blue-700 space-y-1">
+          <div className="bg-green-50 rounded-lg p-4">
+            <h4 className="font-medium text-green-800 mb-2">✅ Métodos de Compartilhamento:</h4>
+            <ul className="text-sm text-green-700 space-y-1">
               <li>• O link contém um resumo dos resultados atuais</li>
-              <li>• Qualquer pessoa pode visualizar os dados compartilhados</li>
+              <li>• <strong>Método 1:</strong> Copiar link (sempre funciona)</li>
+              <li>• <strong>Método 2:</strong> Email automático (depende do cliente)</li>
               <li>• Os dados são atualizados em tempo real no painel</li>
-              <li>• Ideal para compartilhar com colegas e supervisores</li>
-              <li>• Para email: funciona melhor com Outlook, Gmail ou Apple Mail instalados</li>
+              <li>• <strong>WhatsApp/Telegram:</strong> Cole o link copiado</li>
+              <li>• <strong>Redes sociais:</strong> Compartilhe o link diretamente</li>
             </ul>
           </div>
         </div>
