@@ -186,19 +186,86 @@ export const SurveyWizard: React.FC<SurveyWizardProps> = ({ onComplete }) => {
 
   if (isCompleted) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 flex items-center justify-center p-4">
-        <div className="bg-white rounded-xl shadow-xl p-8 max-w-md mx-auto text-center">
-          <div className="mb-6">
-            <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold text-gray-800 mb-2">
-              Obrigado! 🎉
-            </h2>
-            <p className="text-gray-600">
-              Suas respostas foram enviadas com sucesso e nos ajudarão a entender o impacto dos emojis na comunicação digital.
-            </p>
+      <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 p-4">
+        <div className="max-w-4xl mx-auto py-8">
+          {/* Barra de progresso completa */}
+          <div className="w-full mb-8">
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-sm font-medium text-green-700">
+                Pesquisa Concluída ✓
+              </span>
+              <span className="text-sm font-medium text-green-600">
+                100%
+              </span>
+            </div>
+            <div className="w-full bg-gray-200 rounded-full h-2.5">
+              <div className="bg-gradient-to-r from-green-500 to-emerald-500 h-2.5 rounded-full w-full transition-all duration-1000 ease-out" />
+            </div>
+            <div className="text-xs text-green-600 mt-1 font-medium">
+              6 de 6 perguntas respondidas com sucesso!
+            </div>
           </div>
-          <div className="animate-pulse text-red-600">
-            Redirecionando para o painel...
+
+          {/* Card principal de sucesso */}
+          <div className="bg-white rounded-xl shadow-xl p-8 max-w-2xl mx-auto text-center mb-6">
+            <div className="mb-6">
+              <div className="relative">
+                <CheckCircle className="w-20 h-20 text-green-500 mx-auto mb-4 animate-bounce" />
+                <div className="absolute -top-2 -right-2 w-6 h-6 bg-yellow-400 rounded-full flex items-center justify-center">
+                  <span className="text-xs">🎉</span>
+                </div>
+              </div>
+              <h2 className="text-3xl font-bold text-gray-800 mb-3">
+                Missão Cumprida! 🏆
+              </h2>
+              <p className="text-lg text-gray-600 mb-4">
+                Suas respostas foram enviadas com <strong>sucesso</strong> e contribuirão significativamente para nossa pesquisa sobre o impacto dos emojis na comunicação digital.
+              </p>
+            </div>
+
+            {/* Estatísticas da contribuição */}
+            <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg p-6 mb-6">
+              <h3 className="text-lg font-semibold text-green-800 mb-4">
+                🎯 Sua Contribuição para a Ciência:
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                <div className="bg-white rounded-lg p-4 shadow-sm">
+                  <div className="text-2xl font-bold text-green-600">6</div>
+                  <div className="text-sm text-gray-600">Perguntas Respondidas</div>
+                </div>
+                <div className="bg-white rounded-lg p-4 shadow-sm">
+                  <div className="text-2xl font-bold text-blue-600">📊</div>
+                  <div className="text-sm text-gray-600">Dados Coletados</div>
+                </div>
+                <div className="bg-white rounded-lg p-4 shadow-sm">
+                  <div className="text-2xl font-bold text-purple-600">🔬</div>
+                  <div className="text-sm text-gray-600">Pesquisa Avançada</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Próximos passos */}
+            <div className="bg-blue-50 rounded-lg p-4 mb-6">
+              <h4 className="font-semibold text-blue-800 mb-2">📈 O que acontece agora?</h4>
+              <ul className="text-sm text-blue-700 space-y-1 text-left">
+                <li>✅ Seus dados foram salvos de forma segura e anônima</li>
+                <li>📊 Contribuirão para análises estatísticas em tempo real</li>
+                <li>🔬 Ajudarão pesquisadores a entender padrões de comunicação digital</li>
+                <li>📚 Poderão ser usados em publicações científicas (anonimizados)</li>
+              </ul>
+            </div>
+
+            <div className="animate-pulse text-red-600 font-medium">
+              🚀 Redirecionando para o painel de resultados...
+            </div>
+          </div>
+
+          {/* Agradecimento especial */}
+          <div className="text-center text-gray-600 max-w-xl mx-auto">
+            <p className="text-sm">
+              💝 <strong>Obrigado por fazer parte desta pesquisa!</strong><br/>
+              Sua participação é fundamental para o avanço do conhecimento em comunicação digital e tecnologia educacional.
+            </p>
           </div>
         </div>
       </div>
