@@ -2,27 +2,169 @@
 
 ![Oficina de DesEnvolvimento com IA](./assets/oficina-de-des-envolvimento-com-IA.png)
 
-## 🙏 Agradecimentos Especiais
+## 🚀 Sobre a Oficina
 
-Nesta oficina foi possível graças ao convite dos **professores excepcionais** do MPIE-IFRS:
+Esta oficina demonstra o poder da **Inteligência Artificial como ferramenta de desenvolvimento**, mostrando como criar protótipos funcionais em tempo recorde. Durante a apresentação, exploramos conceitos fundamentais de IA, técnicas de prompting eficazes e ferramentas modernas que aceleram o desenvolvimento de software.
 
-### 👩‍🏫 **Profa. Dra. Silvia de Castro Bertagnolli**
-### 👨‍🏫 **Prof. Dr. Fabio Yoshimitsu Okuyama** 
-### 👨‍🏫 **Prof. Dr. Marcelo Augusto Rauh Schmitt**
+### 🎯 **Objetivo Principal**
+Capacitar profissionais da área da saúde e educação a utilizarem IA para criar soluções tecnológicas, mesmo sem conhecimento avançado em programação.
+
+### 🛠️ **Ferramentas Demonstradas**
+- **[Bolt.new](https://bolt.new)** - Desenvolvimento web visual com IA
+- **[Cursor](https://cursor.com)** - Editor de código com IA integrada
+- **Técnicas de Prompting** - 6 tipos essenciais para resultados eficazes
+
+### 📚 **Conceitos Abordados**
+- **Prompts vs Agentes**: Diferença entre comandos simples e sistemas autônomos
+- **Tipos de Prompts**: Direto, Persona, Formato, Contexto, Iterativo e Multitarefa
+- **Prototipagem Rápida**: Do conceito ao produto funcional em horas
 
 ---
 
-## 💝 Uma Declaração de Amor ao MPIE
+## 📊 Projeto Demonstrativo: Pesquisa de Impacto dos Emojis
 
-O **MPIE - Mestrado Profissional em Informática na Educação** do IFRS não é apenas um programa acadêmico, é uma **comunidade transformadora** que forma profissionais capazes de revolucionar a educação através da tecnologia.
+Uma plataforma interativa de pesquisa desenvolvida **durante a oficina** para demonstrar o potencial da IA no desenvolvimento de aplicações completas e funcionais.
 
-### 🎓 **Sobre o MPIE**
+**🌐 Site em produção:** [https://regal-manatee-89073b.netlify.app](https://regal-manatee-89073b.netlify.app)
 
-**MPIE - Mestrado Profissional em Informática na Educação - IFRS**
+### ✨ Funcionalidades Implementadas
+
+#### 📝 Wizard de Pesquisa Inteligente
+- Interface step-by-step com barra de progresso visual
+- Avanço automático ao selecionar respostas
+- Validação em tempo real dos campos obrigatórios
+- Salvamento automático de rascunhos no localStorage
+- Design responsivo otimizado para desktop e mobile
+
+#### 📈 Dashboard Analítico Avançado
+- Visualizações interativas usando Chart.js
+- Métricas em tempo real com cards informativos
+- Múltiplos tipos de gráficos (barras, pizza, linha, faixa etária)
+- Exportação de dados em formato CSV
+- Compartilhamento de resultados via link ou email
+
+#### 🎨 Design System Profissional
+- Paleta Ferrari (vermelho, amarelo, preto)
+- Componentes modulares e reutilizáveis
+- Animações fluidas e micro-interações
+- Sistema de espaçamento consistente (8px grid)
+
+---
+
+## 🛠️ Stack Tecnológica
+
+### Frontend
+- **React 18** - Biblioteca principal
+- **TypeScript** - Tipagem estática
+- **Tailwind CSS** - Framework de estilização
+- **Vite** - Build tool e dev server
+
+### Visualização de Dados
+- **Chart.js** - Biblioteca de gráficos
+- **react-chartjs-2** - Wrapper React para Chart.js
+
+### Ícones e UI
+- **Lucide React** - Biblioteca de ícones
+- **date-fns** - Manipulação de datas
+
+### Armazenamento
+- **localStorage** - Persistência local dos dados
+- **JSON** - Formato de armazenamento
+
+---
+
+## 🚀 Como Executar
+
+### Pré-requisitos
+- Node.js 18+ 
+- npm ou yarn
+
+### Instalação
+```bash
+# Clone o repositório
+git clone [url-do-repositorio]
+
+# Entre no diretório
+cd emoji-survey-wizard
+
+# Instale as dependências
+npm install
+
+# Execute em modo desenvolvimento
+npm run dev
+```
+
+### Build para Produção
+```bash
+# Gerar build otimizado
+npm run build
+
+# Preview do build
+npm run preview
+```
+
+---
+
+## 📋 Estrutura do Projeto
+
+```
+src/
+├── components/           # Componentes React
+│   ├── Dashboard.tsx    # Painel principal com gráficos
+│   ├── SurveyWizard.tsx # Wizard da pesquisa
+│   ├── QuestionCard.tsx # Card individual de pergunta
+│   ├── ProgressBar.tsx  # Barra de progresso
+│   ├── WizardNavigation.tsx # Navegação do wizard
+│   ├── SharedView.tsx   # Visualização compartilhada
+│   ├── ShareModal.tsx   # Modal de compartilhamento
+│   └── Toast.tsx        # Notificações
+├── types/               # Definições TypeScript
+│   └── survey.ts       # Tipos da pesquisa
+├── utils/              # Utilitários
+│   ├── storage.ts      # Gerenciamento localStorage
+│   ├── analytics.ts    # Processamento de dados
+│   └── shareUtils.ts   # Utilitários de compartilhamento
+├── hooks/              # Custom Hooks
+│   └── useToast.ts     # Hook para notificações
+├── App.tsx             # Componente raiz
+└── main.tsx           # Entry point
+```
+
+---
+
+## 📊 Casos de Uso Educacionais
+
+### Para Pesquisadores em Educação
+- Coleta estruturada de dados sobre comunicação digital
+- Análise estatística em tempo real
+- Exportação para ferramentas de análise avançada (Excel, SPSS, R)
+
+### Para Profissionais de Tecnologia Educacional
+- Insights sobre percepção de emojis em interfaces educacionais
+- Dados demográficos para personas de estudantes
+- Tendências de uso por faixa etária
+
+### Para Linguistas Digitais
+- Padrões de uso de emojis em contextos educacionais
+- Impacto na interpretação textual
+- Evolução temporal do uso
+
+---
+
+## 🎓 Sobre o MPIE
+
+### 🏛️ **MPIE - Mestrado Profissional em Informática na Educação - IFRS**
 
 O Mestrado Profissional em Informática na Educação tem por objetivo geral qualificar profissionais para atuarem no campo interdisciplinar das tecnologias de informação e comunicação aplicadas à educação, a partir da imersão na pesquisa.
 
 🌐 **Site oficial:** [https://mpie.poa.ifrs.edu.br/](https://mpie.poa.ifrs.edu.br/)
+
+### 🌟 **Por que o MPIE é Especial:**
+- 🎯 **Foco na Prática**: Cada projeto tem aplicação real no mundo educacional
+- 👥 **Corpo Docente Excepcional**: Professores que são referência nacional e internacional
+- 🚀 **Inovação Constante**: Sempre na vanguarda das tecnologias educacionais
+- 🤝 **Comunidade Acolhedora**: Ambiente colaborativo e inspirador
+- 📚 **Pesquisa Aplicada**: Conhecimento que transforma realidades
 
 ### 🏛️ **Instituto Federal do Rio Grande do Sul - Campus Porto Alegre**
 
@@ -36,12 +178,15 @@ O Mestrado Profissional em Informática na Educação tem por objetivo geral qua
 
 🌐 **Site:** [https://poa.ifrs.edu.br/](https://poa.ifrs.edu.br/)
 
-### 🌟 **Por que o MPIE é Especial:**
-- 🎯 **Foco na Prática**: Cada projeto tem aplicação real no mundo educacional
-- 👥 **Corpo Docente Excepcional**: Professores que são referência nacional e internacional
-- 🚀 **Inovação Constante**: Sempre na vanguarda das tecnologias educacionais
-- 🤝 **Comunidade Acolhedora**: Ambiente colaborativo e inspirador
-- 📚 **Pesquisa Aplicada**: Conhecimento que transforma realidades
+---
+
+## 🙏 Agradecimentos Especiais
+
+Esta oficina foi possível graças ao convite dos **professores excepcionais** do MPIE-IFRS:
+
+### 👩‍🏫 **Profa. Dra. Silvia de Castro Bertagnolli**
+### 👨‍🏫 **Prof. Dr. Fabio Yoshimitsu Okuyama** 
+### 👨‍🏫 **Prof. Dr. Marcelo Augusto Rauh Schmitt**
 
 ---
 
@@ -147,176 +292,12 @@ Caro(a) mestrando(a), você está prestes a embarcar na **quest mais importante*
 
 ---
 
-## 📊 Pesquisa de Impacto dos Emojis
+## 🎓 Material da Oficina
 
-Uma plataforma interativa de pesquisa desenvolvida para analisar o impacto dos emojis na comunicação digital. Este projeto oferece uma interface moderna e intuitiva para coleta de dados e visualização de resultados em tempo real.
-
-## 🚀 Demonstração
-
-**Site em produção:** [https://regal-manatee-89073b.netlify.app](https://regal-manatee-89073b.netlify.app)
-
-## ✨ Funcionalidades
-
-### 📝 Wizard de Pesquisa
-- **Interface step-by-step** com barra de progresso visual
-- **Avanço automático** ao selecionar respostas (radio/select)
-- **Validação em tempo real** dos campos obrigatórios
-- **Salvamento automático** de rascunhos no localStorage
-- **Design responsivo** otimizado para desktop e mobile
-
-### 📈 Dashboard Analítico
-- **Visualizações interativas** usando Chart.js
-- **Métricas em tempo real** com cards informativos
-- **Múltiplos tipos de gráficos:**
-  - Gráfico de barras para distribuição geral
-  - Gráfico de pizza para distribuição por gênero
-  - Gráfico de linha para tendências temporais
-  - Análise por faixa etária
-- **Exportação de dados** em formato CSV
-- **Compartilhamento de resultados** via link ou email
-
-### 🎨 Design System
-- **Paleta Ferrari** (vermelho, amarelo, preto)
-- **Componentes modulares** e reutilizáveis
-- **Animações fluidas** e micro-interações
-- **Sistema de espaçamento** consistente (8px grid)
-
-## 🛠️ Tecnologias Utilizadas
-
-### Frontend
-- **React 18** - Biblioteca principal
-- **TypeScript** - Tipagem estática
-- **Tailwind CSS** - Framework de estilização
-- **Vite** - Build tool e dev server
-
-### Visualização de Dados
-- **Chart.js** - Biblioteca de gráficos
-- **react-chartjs-2** - Wrapper React para Chart.js
-
-### Ícones e UI
-- **Lucide React** - Biblioteca de ícones
-- **date-fns** - Manipulação de datas
-
-### Armazenamento
-- **localStorage** - Persistência local dos dados
-- **JSON** - Formato de armazenamento
-
-## 📋 Estrutura do Projeto
-
-```
-src/
-├── components/           # Componentes React
-│   ├── Dashboard.tsx    # Painel principal com gráficos
-│   ├── SurveyWizard.tsx # Wizard da pesquisa
-│   ├── QuestionCard.tsx # Card individual de pergunta
-│   ├── ProgressBar.tsx  # Barra de progresso
-│   ├── WizardNavigation.tsx # Navegação do wizard
-│   ├── SharedView.tsx   # Visualização compartilhada
-│   ├── ShareModal.tsx   # Modal de compartilhamento
-│   └── Toast.tsx        # Notificações
-├── types/               # Definições TypeScript
-│   └── survey.ts       # Tipos da pesquisa
-├── utils/              # Utilitários
-│   ├── storage.ts      # Gerenciamento localStorage
-│   ├── analytics.ts    # Processamento de dados
-│   └── shareUtils.ts   # Utilitários de compartilhamento
-├── hooks/              # Custom Hooks
-│   └── useToast.ts     # Hook para notificações
-├── App.tsx             # Componente raiz
-└── main.tsx           # Entry point
-```
-
-## 🚀 Como Executar
-
-### Pré-requisitos
-- Node.js 18+ 
-- npm ou yarn
-
-### Instalação
-```bash
-# Clone o repositório
-git clone [url-do-repositorio]
-
-# Entre no diretório
-cd emoji-survey-wizard
-
-# Instale as dependências
-npm install
-
-# Execute em modo desenvolvimento
-npm run dev
-```
-
-### Build para Produção
-```bash
-# Gerar build otimizado
-npm run build
-
-# Preview do build
-npm run preview
-```
-
-## 📊 Estrutura dos Dados
-
-### Resposta da Pesquisa
-```typescript
-interface SurveyResponse {
-  id: string;
-  timestamp: string;
-  frequency: 'daily' | 'weekly' | 'rarely';
-  clarityImpact: 'positive' | 'neutral' | 'negative';
-  toneInfluence: 'positive' | 'neutral' | 'negative';
-  professionalContext: 'positive' | 'neutral' | 'negative';
-  age: number;
-  gender: 'male' | 'female' | 'non-binary' | 'prefer-not-to-say' | 'other';
-}
-```
-
-### Perguntas da Pesquisa
-1. **Frequência de uso** - Como o usuário utiliza emojis
-2. **Impacto na clareza** - Percepção sobre clareza das mensagens
-3. **Influência no tom** - Como emojis afetam interpretação
-4. **Contexto profissional** - Adequação em ambientes de trabalho
-5. **Dados demográficos** - Idade e gênero para segmentação
-
-## 📈 Métricas e Analytics
-
-### Distribuições Calculadas
-- **Impacto geral** (positivo/neutro/negativo)
-- **Faixas etárias** (18-25, 26-35, 36-45, 46-55, 56+)
-- **Distribuição por gênero**
-- **Tendências temporais** (respostas por dia)
-
-### Exportação e Compartilhamento
-- Formato CSV com todas as respostas
-- Headers em português para facilitar análise
-- Nome do arquivo com timestamp automático
-- Links compartilháveis com resumo dos dados
-- Envio por email (integração com clientes nativos)
-
-## 🎯 Casos de Uso Educacionais
-
-### Para Pesquisadores em Educação
-- Coleta estruturada de dados sobre comunicação digital
-- Análise estatística em tempo real
-- Exportação para ferramentas de análise avançada (Excel, SPSS, R)
-
-### Para Profissionais de Tecnologia Educacional
-- Insights sobre percepção de emojis em interfaces educacionais
-- Dados demográficos para personas de estudantes
-- Tendências de uso por faixa etária
-
-### Para Linguistas Digitais
-- Padrões de uso de emojis em contextos educacionais
-- Impacto na interpretação textual
-- Evolução temporal do uso
-
-## 🎓 Aprendizados do Oficina
-
-### 📖 Material da Apresentação
+### 📖 Apresentação Completa
 📄 **[Download da Apresentação (PDF)](./assets/oficina-de-des-envolvimento-com-IA.pdf)**
 
-### Conceitos Abordados
+### Conceitos Demonstrados
 - **Prompts Eficazes**: Como escrever instruções claras para IA
 - **Agentes de IA**: Sistemas autônomos para desenvolvimento
 - **Prototipagem Rápida**: Do conceito ao produto em horas
@@ -329,6 +310,8 @@ interface SurveyResponse {
 4. **Prompt com Contexto** - Fornecendo exemplos
 5. **Prompt Iterativo** - Refinamento em etapas
 6. **Prompt Multitarefa** - Múltiplas solicitações
+
+---
 
 ## 👨‍🏫 Sobre o Instrutor
 
@@ -346,28 +329,9 @@ interface SurveyResponse {
 - 💼 LinkedIn: [/marciocar](https://linkedin.com/in/marciocar)
 - 🌐 Site: [ojogodosnegocios.com](https://ojogodosnegocios.com)
 
-## 🔧 Configurações Avançadas
+---
 
-### Personalização de Cores
-As cores podem ser ajustadas no arquivo `tailwind.config.js` ou diretamente nos componentes usando classes Tailwind.
-
-### Adição de Perguntas
-Novas perguntas podem ser adicionadas no array `questions` em `SurveyWizard.tsx`:
-
-```typescript
-{
-  id: 'newQuestion',
-  title: 'Sua nova pergunta?',
-  type: 'radio', // 'radio' | 'number' | 'select'
-  options: [
-    { value: 'option1', label: 'Opção 1' },
-    { value: 'option2', label: 'Opção 2' }
-  ],
-  validation: (value) => !value ? 'Campo obrigatório' : null
-}
-```
-
-## 🚀 Deploy
+## 🚀 Deploy e Configurações
 
 ### Netlify (Recomendado)
 ```bash
@@ -380,6 +344,8 @@ npm run build
 - **GitHub Pages**: Configure GitHub Actions
 - **Firebase Hosting**: `firebase deploy`
 
+---
+
 ## 🤝 Contribuição
 
 1. Fork o projeto
@@ -388,9 +354,13 @@ npm run build
 4. Push para a branch (`git push origin feature/AmazingFeature`)
 5. Abra um Pull Request
 
+---
+
 ## 📝 Licença
 
 Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalhes.
+
+---
 
 ## 🎯 Objetivos Pedagógicos
 
@@ -406,7 +376,7 @@ Este projeto demonstra:
 
 ## 📞 Suporte
 
-Para dúvidas sobre o projeto ou Oficina:
+Para dúvidas sobre o projeto ou oficina:
 - 📧 Entre em contato através do [site](https://ojogodosnegocios.com)
 - 💬 Abra uma [issue](../../issues) no repositório
 - 📱 Siga [@marciotics](https://instagram.com/marciotics) no Instagram
