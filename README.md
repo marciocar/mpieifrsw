@@ -4,16 +4,11 @@
 
 ## 🙏 Agradecimentos Especiais
 
-Este workshop foi possível graças ao convite dos **professores excepcionais** do MPIE-IFRS:
+Esta oficina foi possível graças ao convite dos **professores excepcionais** do MPIE-IFRS:
 
 ### 👩‍🏫 **Profa. Dra. Silvia de Castro Bertagnolli**
-Coordenadora visionária que sempre apoia iniciativas inovadoras em tecnologia educacional.
-
 ### 👨‍🏫 **Prof. Dr. Fabio Yoshimitsu Okuyama** 
-Meu querido orientador no mestrado, mentor inspirador e grande incentivador da aplicação prática da IA na educação.
-
 ### 👨‍🏫 **Prof. Dr. Marcelo Augusto Rauh Schmitt**
-Pesquisador dedicado que sempre busca conectar teoria e prática no desenvolvimento tecnológico.
 
 ---
 
@@ -296,7 +291,7 @@ interface SurveyResponse {
 - Impacto na interpretação textual
 - Evolução temporal do uso
 
-## 🎓 Aprendizados do Workshop
+## 🎓 Aprendizados do Oficina
 
 ### 📖 Material da Apresentação
 📄 **[Download da Apresentação (PDF)](./assets/oficina-de-des-envolvimento-com-IA.pdf)**
@@ -391,7 +386,7 @@ Este projeto demonstra:
 
 ## 📞 Suporte
 
-Para dúvidas sobre o projeto ou workshop:
+Para dúvidas sobre o projeto ou Oficina:
 - 📧 Entre em contato através do [site](https://ojogodosnegocios.com)
 - 💬 Abra uma [issue](../../issues) no repositório
 - 📱 Siga [@marciotics](https://instagram.com/marciotics) no Instagram
