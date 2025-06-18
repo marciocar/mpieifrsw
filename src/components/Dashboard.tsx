@@ -12,7 +12,7 @@ import {
   LineElement,
 } from 'chart.js';
 import { Bar, Pie, Line } from 'react-chartjs-2';
-import { getResponses, exportToCSV } from '../utils/storage';
+import { getResponses, exportToCSV } from '../utils/database';
 import { getResponseDistribution, getAgeGroupDistribution, getGenderDistribution, getTemporalTrends } from '../utils/analytics';
 import { SurveyResponse } from '../types/survey';
 import { BarChart3, Download, Users, TrendingUp, RefreshCw } from 'lucide-react';

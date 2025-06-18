@@ -68,8 +68,9 @@ Uma plataforma interativa de pesquisa desenvolvida **durante a oficina** para de
 - **date-fns** - Manipulação de datas
 
 ### Armazenamento
-- **localStorage** - Persistência local dos dados
-- **JSON** - Formato de armazenamento
+- **SQLite** - Banco de dados relacional local
+- **better-sqlite3** - Driver SQLite para Node.js
+- **JSON** - Formato de intercâmbio de dados
 
 ---
 
@@ -121,13 +122,12 @@ src/
 ├── types/               # Definições TypeScript
 │   └── survey.ts       # Tipos da pesquisa
 ├── utils/              # Utilitários
-│   ├── storage.ts      # Gerenciamento localStorage
+│   ├── database.ts     # Gerenciamento SQLite
 │   ├── analytics.ts    # Processamento de dados
 │   └── shareUtils.ts   # Utilitários de compartilhamento
 ├── hooks/              # Custom Hooks
 │   └── useToast.ts     # Hook para notificações
 ├── App.tsx             # Componente raiz
-└── main.tsx           # Entry point
 ```
 
 ---

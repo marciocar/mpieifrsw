@@ -3,7 +3,7 @@ import { QuestionConfig, SurveyFormData, SurveyResponse } from '../types/survey'
 import { ProgressBar } from './ProgressBar';
 import { QuestionCard } from './QuestionCard';
 import { WizardNavigation } from './WizardNavigation';
-import { saveResponse, saveDraft, getDraft } from '../utils/storage';
+import { saveResponse, saveDraft, getDraft } from '../utils/database';
 import { CheckCircle, Sparkles } from 'lucide-react';
 
 const questions: QuestionConfig[] = [
