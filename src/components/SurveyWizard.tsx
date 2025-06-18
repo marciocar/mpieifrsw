@@ -86,6 +86,7 @@ export const SurveyWizard: React.FC<SurveyWizardProps> = ({ onComplete }) => {
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
+  const [isAutoAdvancing, setIsAutoAdvancing] = useState(false);
 
   useEffect(() => {
     const draft = getDraft();
@@ -106,6 +107,22 @@ export const SurveyWizard: React.FC<SurveyWizardProps> = ({ onComplete }) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: '' }));
+    }
+    
+    // Auto-advance para perguntas de radio e select (exceto a última pergunta)
+    const currentQuestion = questions[currentStep - 1];
+    const isLastStep = currentStep === questions.length;
+    
+    if ((currentQuestion.type === 'radio' || currentQuestion.type === 'select') && !isLastStep) {
+      setIsAutoAdvancing(true);
+      
+      // Delay para dar feedback visual da seleção
+      setTimeout(() => {
+        if (validateCurrentStep()) {
+          setCurrentStep(prev => prev + 1);
+        }
+        setIsAutoAdvancing(false);
+      }, 600);
     }
   };
 
@@ -204,6 +221,7 @@ export const SurveyWizard: React.FC<SurveyWizardProps> = ({ onComplete }) => {
           value={formData[currentQuestion.id]}
           onChange={(value) => updateFormData(currentQuestion.id, value)}
           error={errors[currentQuestion.id]}
+          isAutoAdvancing={isAutoAdvancing}
         />
 
         <WizardNavigation
@@ -214,6 +232,7 @@ export const SurveyWizard: React.FC<SurveyWizardProps> = ({ onComplete }) => {
           onSubmit={handleSubmit}
           canGoNext={!errors[currentQuestion.id] && formData[currentQuestion.id] !== undefined}
           isSubmitting={isSubmitting}
+          isAutoAdvancing={isAutoAdvancing}
         />
       </div>
     </div>

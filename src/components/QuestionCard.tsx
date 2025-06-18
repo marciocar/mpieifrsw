@@ -6,13 +6,15 @@ interface QuestionCardProps {
   value: any;
   onChange: (value: any) => void;
   error?: string;
+  isAutoAdvancing?: boolean;
 }
 
 export const QuestionCard: React.FC<QuestionCardProps> = ({
   question,
   value,
   onChange,
-  error
+  error,
+  isAutoAdvancing = false
 }) => {
   const renderInput = () => {
     switch (question.type) {
@@ -22,7 +24,11 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
             {question.options?.map((option) => (
               <label
                 key={option.value}
-                className="flex items-center p-4 border-2 border-gray-200 rounded-lg hover:border-red-400 cursor-pointer transition-colors duration-200"
+                className={`flex items-center p-4 border-2 rounded-lg cursor-pointer transition-all duration-300 ${
+                  value === option.value 
+                    ? 'border-red-500 bg-red-50 shadow-md transform scale-[1.02]' 
+                    : 'border-gray-200 hover:border-red-400 hover:bg-gray-50'
+                } ${isAutoAdvancing && value === option.value ? 'animate-pulse' : ''}`}
               >
                 <input
                   type="radio"
@@ -32,7 +38,16 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
                   onChange={(e) => onChange(e.target.value)}
                   className="w-4 h-4 text-red-600 border-gray-300 focus:ring-red-500"
                 />
-                <span className="ml-3 text-gray-700 font-medium">{option.label}</span>
+                <span className={`ml-3 font-medium transition-colors duration-200 ${
+                  value === option.value ? 'text-red-700' : 'text-gray-700'
+                }`}>
+                  {option.label}
+                </span>
+                {value === option.value && (
+                  <div className="ml-auto">
+                    <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+                  </div>
+                )}
               </label>
             ))}
           </div>
@@ -56,7 +71,9 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
           <select
             value={value || ''}
             onChange={(e) => onChange(e.target.value)}
-            className="w-full p-4 border-2 border-gray-200 rounded-lg focus:border-red-500 focus:ring-2 focus:ring-red-200 transition-all duration-200"
+            className={`w-full p-4 border-2 rounded-lg focus:border-red-500 focus:ring-2 focus:ring-red-200 transition-all duration-300 ${
+              value ? 'border-red-500 bg-red-50' : 'border-gray-200'
+            } ${isAutoAdvancing ? 'animate-pulse' : ''}`}
           >
             <option value="">Selecione uma opção</option>
             {question.options?.map((option) => (
