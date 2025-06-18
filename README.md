@@ -82,10 +82,10 @@ Uma plataforma interativa de pesquisa desenvolvida **durante a oficina** para de
 ### Instalação
 ```bash
 # Clone o repositório
-git clone [url-do-repositorio]
+git clone https://github.com/marciocar/mpieifrsw.git
 
 # Entre no diretório
-cd emoji-survey-wizard
+cd mpieifrsw
 
 # Instale as dependências
 npm install
@@ -327,11 +327,29 @@ Caro(a) mestrando(a), você está prestes a embarcar na **quest mais importante*
 **Contatos:**
 - 📱 Instagram: [@marciotics](https://instagram.com/marciotics)
 - 💼 LinkedIn: [/marciocar](https://linkedin.com/in/marciocar)
+- 🐙 GitHub: [@marciocar](https://github.com/marciocar)
 - 🌐 Site: [ojogodosnegocios.com](https://ojogodosnegocios.com)
 
 ---
 
 ## 🚀 Deploy e Configurações
+
+### 📦 Repositório
+**GitHub:** [https://github.com/marciocar/mpieifrsw](https://github.com/marciocar/mpieifrsw)
+
+```bash
+# Clone o repositório
+git clone https://github.com/marciocar/mpieifrsw.git
+
+# Entre no diretório
+cd mpieifrsw
+
+# Instale as dependências
+npm install
+
+# Execute em modo desenvolvimento
+npm run dev
+```
 
 ### Netlify (Recomendado)
 ```bash
@@ -349,9 +367,9 @@ npm run build
 ## 🤝 Contribuição
 
 1. Fork o projeto
-2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
-3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
-4. Push para a branch (`git push origin feature/AmazingFeature`)
+2. Crie uma branch para sua feature (`git checkout -b feature/NovaFuncionalidade`)
+3. Commit suas mudanças (`git commit -m 'Adiciona nova funcionalidade'`)
+4. Push para a branch (`git push origin feature/NovaFuncionalidade`)
 5. Abra um Pull Request
 
 ---
@@ -378,8 +396,9 @@ Este projeto demonstra:
 
 Para dúvidas sobre o projeto ou oficina:
 - 📧 Entre em contato através do [site](https://ojogodosnegocios.com)
-- 💬 Abra uma [issue](../../issues) no repositório
+- 💬 Abra uma [issue](https://github.com/marciocar/mpieifrsw/issues) no repositório
 - 📱 Siga [@marciotics](https://instagram.com/marciotics) no Instagram
+- 🐙 Contribua no [GitHub](https://github.com/marciocar/mpieifrsw)
 
 ---
 
