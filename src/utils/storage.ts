@@ -11,8 +11,33 @@ export const saveResponse = (response: SurveyResponse): void => {
 };
 
 export const getResponses = (): SurveyResponse[] => {
-  const stored = localStorage.getItem(STORAGE_KEY);
-  return stored ? JSON.parse(stored) : [];
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (!stored) return [];
+    
+    const parsed = JSON.parse(stored);
+    
+    // Validar se é um array
+    if (!Array.isArray(parsed)) {
+      console.warn('Dados corrompidos no localStorage, reinicializando...');
+      localStorage.removeItem(STORAGE_KEY);
+      return [];
+    }
+    
+    // Filtrar respostas válidas
+    return parsed.filter(response => 
+      response && 
+      typeof response === 'object' &&
+      response.id &&
+      response.timestamp &&
+      response.clarityImpact &&
+      typeof response.age === 'number'
+    );
+  } catch (error) {
+    console.error('Erro ao carregar respostas:', error);
+    localStorage.removeItem(STORAGE_KEY);
+    return [];
+  }
 };
 
 export const saveDraft = (draft: SurveyFormData): void => {
