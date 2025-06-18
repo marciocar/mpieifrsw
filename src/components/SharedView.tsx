@@ -1,7 +1,7 @@
 import React from 'react';
 import { BarChart3, Users, TrendingUp, ExternalLink, FileText, AlertCircle, Target, Award, Clock, PieChart } from 'lucide-react';
 import { generateShareableReport } from '../utils/shareUtils';
-import { getResponses } from '../utils/database';
+import { getResponsesSync as getResponses } from '../utils/database';
 import { getResponseDistribution, getAgeGroupDistribution, getGenderDistribution } from '../utils/analytics';
 
 interface SharedViewProps {

@@ -89,15 +89,20 @@ export const SurveyWizard: React.FC<SurveyWizardProps> = ({ onComplete }) => {
   const [isAutoAdvancing, setIsAutoAdvancing] = useState(false);
 
   useEffect(() => {
-    const draft = getDraft();
-    if (draft) {
-      setFormData(draft);
-    }
+    getDraft().then(draft => {
+      if (draft) {
+        setFormData(draft);
+      }
+    }).catch(error => {
+      console.error('Erro ao carregar rascunho:', error);
+    });
   }, []);
 
   useEffect(() => {
     if (Object.keys(formData).length > 0) {
-      saveDraft(formData);
+      saveDraft(formData).catch(error => {
+        console.error('Erro ao salvar rascunho:', error);
+      });
     }
   }, [formData]);
 
@@ -175,7 +180,7 @@ export const SurveyWizard: React.FC<SurveyWizardProps> = ({ onComplete }) => {
       gender: formData.gender as any
     };
 
-    saveResponse(response);
+    await saveResponse(response);
     setIsSubmitting(false);
     setIsCompleted(true);
     

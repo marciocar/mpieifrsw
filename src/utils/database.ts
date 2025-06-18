@@ -1,17 +1,40 @@
-import Database from 'better-sqlite3';
+import initSqlJs, { Database } from 'sql.js';
 import { SurveyResponse, SurveyFormData } from '../types/survey';
 
-// Inicializar banco de dados
-let db: Database.Database | null = null;
+// Instância do banco de dados
+let db: Database | null = null;
+let SQL: any = null;
 
-const initDatabase = (): Database.Database => {
-  if (db) return db;
+// Chave para persistir no localStorage
+const DB_STORAGE_KEY = 'emoji_survey_sqlite_db';
+
+// Inicializar SQLite no navegador
+const initDatabase = async (): Promise<Database> => {
+  if (db && SQL) return db;
   
   try {
-    db = new Database('emoji_survey.db');
+    // Inicializar sql.js
+    SQL = await initSqlJs({
+      // Carregar o wasm do CDN
+      locateFile: (file: string) => `https://sql.js.org/dist/${file}`
+    });
     
-    // Criar tabela de respostas se não existir
-    db.exec(`
+    // Tentar carregar banco existente do localStorage
+    const savedDb = localStorage.getItem(DB_STORAGE_KEY);
+    
+    if (savedDb) {
+      // Restaurar banco existente
+      const uint8Array = new Uint8Array(JSON.parse(savedDb));
+      db = new SQL.Database(uint8Array);
+      console.log('✅ Banco SQLite restaurado do localStorage');
+    } else {
+      // Criar novo banco
+      db = new SQL.Database();
+      console.log('✅ Novo banco SQLite criado');
+    }
+    
+    // Criar tabelas se não existirem
+    db.run(`
       CREATE TABLE IF NOT EXISTS survey_responses (
         id TEXT PRIMARY KEY,
         timestamp TEXT NOT NULL,
@@ -26,34 +49,53 @@ const initDatabase = (): Database.Database => {
     `);
 
     // Criar tabela de rascunhos
-    db.exec(`
+    db.run(`
       CREATE TABLE IF NOT EXISTS survey_drafts (
-        id INTEGER PRIMARY KEY,
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
         draft_data TEXT NOT NULL,
         updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
       )
     `);
 
     // Criar índices para melhor performance
-    db.exec(`
+    db.run(`
       CREATE INDEX IF NOT EXISTS idx_responses_timestamp ON survey_responses(timestamp);
       CREATE INDEX IF NOT EXISTS idx_responses_clarity_impact ON survey_responses(clarity_impact);
       CREATE INDEX IF NOT EXISTS idx_responses_age ON survey_responses(age);
       CREATE INDEX IF NOT EXISTS idx_responses_gender ON survey_responses(gender);
     `);
 
-    console.log('✅ Banco de dados SQLite inicializado com sucesso');
+    // Salvar no localStorage
+    saveDatabase();
+    
+    console.log('✅ Banco de dados SQLite inicializado com sucesso no navegador');
     return db;
   } catch (error) {
-    console.error('❌ Erro ao inicializar banco de dados:', error);
+    console.error('❌ Erro ao inicializar banco de dados SQLite:', error);
+    
+    // Fallback para localStorage se SQLite falhar
+    console.warn('⚠️ Usando fallback para localStorage');
     throw error;
   }
 };
 
-// Salvar resposta da pesquisa
-export const saveResponse = (response: SurveyResponse): void => {
+// Salvar banco no localStorage
+const saveDatabase = (): void => {
+  if (!db) return;
+  
   try {
-    const database = initDatabase();
+    const data = db.export();
+    const dataArray = Array.from(data);
+    localStorage.setItem(DB_STORAGE_KEY, JSON.stringify(dataArray));
+  } catch (error) {
+    console.error('❌ Erro ao salvar banco no localStorage:', error);
+  }
+};
+
+// Salvar resposta da pesquisa
+export const saveResponse = async (response: SurveyResponse): Promise<void> => {
+  try {
+    const database = await initDatabase();
     
     const stmt = database.prepare(`
       INSERT INTO survey_responses (
@@ -62,7 +104,7 @@ export const saveResponse = (response: SurveyResponse): void => {
       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `);
 
-    stmt.run(
+    stmt.run([
       response.id,
       response.timestamp,
       response.frequency,
@@ -71,10 +113,13 @@ export const saveResponse = (response: SurveyResponse): void => {
       response.professionalContext,
       response.age,
       response.gender
-    );
+    ]);
 
+    stmt.free();
+    saveDatabase(); // Persistir no localStorage
+    
     console.log('✅ Resposta salva no SQLite:', response.id);
-    clearDraft(); // Limpar rascunho após salvar
+    await clearDraft(); // Limpar rascunho após salvar
   } catch (error) {
     console.error('❌ Erro ao salvar resposta:', error);
     throw new Error('Falha ao salvar resposta no banco de dados');
@@ -82,9 +127,9 @@ export const saveResponse = (response: SurveyResponse): void => {
 };
 
 // Buscar todas as respostas
-export const getResponses = (): SurveyResponse[] => {
+export const getResponses = async (): Promise<SurveyResponse[]> => {
   try {
-    const database = initDatabase();
+    const database = await initDatabase();
     
     const stmt = database.prepare(`
       SELECT 
@@ -100,18 +145,70 @@ export const getResponses = (): SurveyResponse[] => {
       ORDER BY timestamp DESC
     `);
 
-    const rows = stmt.all() as any[];
+    const results: SurveyResponse[] = [];
     
-    return rows.map(row => ({
-      id: row.id,
-      timestamp: row.timestamp,
-      frequency: row.frequency as 'daily' | 'weekly' | 'rarely',
-      clarityImpact: row.clarityImpact as 'positive' | 'neutral' | 'negative',
-      toneInfluence: row.toneInfluence as 'positive' | 'neutral' | 'negative',
-      professionalContext: row.professionalContext as 'positive' | 'neutral' | 'negative',
-      age: row.age,
-      gender: row.gender as 'male' | 'female' | 'non-binary' | 'prefer-not-to-say' | 'other'
-    }));
+    while (stmt.step()) {
+      const row = stmt.getAsObject();
+      results.push({
+        id: row.id as string,
+        timestamp: row.timestamp as string,
+        frequency: row.frequency as 'daily' | 'weekly' | 'rarely',
+        clarityImpact: row.clarityImpact as 'positive' | 'neutral' | 'negative',
+        toneInfluence: row.toneInfluence as 'positive' | 'neutral' | 'negative',
+        professionalContext: row.professionalContext as 'positive' | 'neutral' | 'negative',
+        age: row.age as number,
+        gender: row.gender as 'male' | 'female' | 'non-binary' | 'prefer-not-to-say' | 'other'
+      });
+    }
+    
+    stmt.free();
+    return results;
+  } catch (error) {
+    console.error('❌ Erro ao buscar respostas:', error);
+    return [];
+  }
+};
+
+// Versão síncrona para compatibilidade
+export const getResponsesSync = (): SurveyResponse[] => {
+  if (!db) {
+    console.warn('⚠️ Banco não inicializado, retornando array vazio');
+    return [];
+  }
+  
+  try {
+    const stmt = db.prepare(`
+      SELECT 
+        id,
+        timestamp,
+        frequency,
+        clarity_impact as clarityImpact,
+        tone_influence as toneInfluence,
+        professional_context as professionalContext,
+        age,
+        gender
+      FROM survey_responses 
+      ORDER BY timestamp DESC
+    `);
+
+    const results: SurveyResponse[] = [];
+    
+    while (stmt.step()) {
+      const row = stmt.getAsObject();
+      results.push({
+        id: row.id as string,
+        timestamp: row.timestamp as string,
+        frequency: row.frequency as 'daily' | 'weekly' | 'rarely',
+        clarityImpact: row.clarityImpact as 'positive' | 'neutral' | 'negative',
+        toneInfluence: row.toneInfluence as 'positive' | 'neutral' | 'negative',
+        professionalContext: row.professionalContext as 'positive' | 'neutral' | 'negative',
+        age: row.age as number,
+        gender: row.gender as 'male' | 'female' | 'non-binary' | 'prefer-not-to-say' | 'other'
+      });
+    }
+    
+    stmt.free();
+    return results;
   } catch (error) {
     console.error('❌ Erro ao buscar respostas:', error);
     return [];
@@ -119,19 +216,22 @@ export const getResponses = (): SurveyResponse[] => {
 };
 
 // Salvar rascunho
-export const saveDraft = (draft: SurveyFormData): void => {
+export const saveDraft = async (draft: SurveyFormData): Promise<void> => {
   try {
-    const database = initDatabase();
+    const database = await initDatabase();
     
     // Remover rascunho anterior (mantemos apenas um)
-    database.prepare('DELETE FROM survey_drafts').run();
+    database.run('DELETE FROM survey_drafts');
     
     // Inserir novo rascunho
     const stmt = database.prepare(`
       INSERT INTO survey_drafts (draft_data) VALUES (?)
     `);
     
-    stmt.run(JSON.stringify(draft));
+    stmt.run([JSON.stringify(draft)]);
+    stmt.free();
+    saveDatabase(); // Persistir no localStorage
+    
     console.log('✅ Rascunho salvo no SQLite');
   } catch (error) {
     console.error('❌ Erro ao salvar rascunho:', error);
@@ -139,9 +239,9 @@ export const saveDraft = (draft: SurveyFormData): void => {
 };
 
 // Buscar rascunho
-export const getDraft = (): SurveyFormData | null => {
+export const getDraft = async (): Promise<SurveyFormData | null> => {
   try {
-    const database = initDatabase();
+    const database = await initDatabase();
     
     const stmt = database.prepare(`
       SELECT draft_data FROM survey_drafts 
@@ -149,12 +249,13 @@ export const getDraft = (): SurveyFormData | null => {
       LIMIT 1
     `);
     
-    const row = stmt.get() as any;
-    
-    if (row) {
-      return JSON.parse(row.draft_data);
+    if (stmt.step()) {
+      const row = stmt.getAsObject();
+      stmt.free();
+      return JSON.parse(row.draft_data as string);
     }
     
+    stmt.free();
     return null;
   } catch (error) {
     console.error('❌ Erro ao buscar rascunho:', error);
@@ -163,10 +264,11 @@ export const getDraft = (): SurveyFormData | null => {
 };
 
 // Limpar rascunho
-export const clearDraft = (): void => {
+export const clearDraft = async (): Promise<void> => {
   try {
-    const database = initDatabase();
-    database.prepare('DELETE FROM survey_drafts').run();
+    const database = await initDatabase();
+    database.run('DELETE FROM survey_drafts');
+    saveDatabase(); // Persistir no localStorage
     console.log('✅ Rascunho removido do SQLite');
   } catch (error) {
     console.error('❌ Erro ao limpar rascunho:', error);
@@ -174,9 +276,9 @@ export const clearDraft = (): void => {
 };
 
 // Exportar dados para CSV
-export const exportToCSV = (): number => {
+export const exportToCSV = async (): Promise<number> => {
   try {
-    const responses = getResponses();
+    const responses = await getResponses();
     
     if (responses.length === 0) {
       throw new Error('Nenhum dado disponível para exportar');
@@ -226,30 +328,38 @@ export const exportToCSV = (): number => {
 };
 
 // Estatísticas do banco
-export const getDatabaseStats = () => {
+export const getDatabaseStats = async () => {
   try {
-    const database = initDatabase();
+    const database = await initDatabase();
     
-    const totalResponses = database.prepare('SELECT COUNT(*) as count FROM survey_responses').get() as any;
-    const hasDraft = database.prepare('SELECT COUNT(*) as count FROM survey_drafts').get() as any;
+    const totalStmt = database.prepare('SELECT COUNT(*) as count FROM survey_responses');
+    totalStmt.step();
+    const totalResponses = totalStmt.getAsObject().count as number;
+    totalStmt.free();
+    
+    const draftStmt = database.prepare('SELECT COUNT(*) as count FROM survey_drafts');
+    draftStmt.step();
+    const hasDraft = (draftStmt.getAsObject().count as number) > 0;
+    draftStmt.free();
     
     return {
-      totalResponses: totalResponses.count,
-      hasDraft: hasDraft.count > 0,
-      databaseSize: database.prepare("SELECT page_count * page_size as size FROM pragma_page_count(), pragma_page_size()").get() as any
+      totalResponses,
+      hasDraft,
+      databaseSize: db ? db.export().length : 0
     };
   } catch (error) {
     console.error('❌ Erro ao obter estatísticas:', error);
-    return { totalResponses: 0, hasDraft: false, databaseSize: { size: 0 } };
+    return { totalResponses: 0, hasDraft: false, databaseSize: 0 };
   }
 };
 
 // Limpar todos os dados (para desenvolvimento/testes)
-export const clearAllData = (): void => {
+export const clearAllData = async (): Promise<void> => {
   try {
-    const database = initDatabase();
-    database.prepare('DELETE FROM survey_responses').run();
-    database.prepare('DELETE FROM survey_drafts').run();
+    const database = await initDatabase();
+    database.run('DELETE FROM survey_responses');
+    database.run('DELETE FROM survey_drafts');
+    saveDatabase(); // Persistir no localStorage
     console.log('✅ Todos os dados foram removidos do SQLite');
   } catch (error) {
     console.error('❌ Erro ao limpar dados:', error);
@@ -257,11 +367,10 @@ export const clearAllData = (): void => {
   }
 };
 
-// Fechar conexão com banco (para cleanup)
-export const closeDatabase = (): void => {
-  if (db) {
-    db.close();
-    db = null;
-    console.log('✅ Conexão com SQLite fechada');
-  }
-};
+// Inicializar banco automaticamente quando o módulo for carregado
+initDatabase().catch(error => {
+  console.error('❌ Falha na inicialização automática do banco:', error);
+});
+
+// Exportar função de inicialização para uso manual
+export { initDatabase };

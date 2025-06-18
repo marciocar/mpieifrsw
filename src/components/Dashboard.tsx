@@ -12,7 +12,7 @@ import {
   LineElement,
 } from 'chart.js';
 import { Bar, Pie, Line } from 'react-chartjs-2';
-import { getResponses, exportToCSV } from '../utils/database';
+import { getResponsesSync as getResponses, exportToCSV } from '../utils/database';
 import { getResponseDistribution, getAgeGroupDistribution, getGenderDistribution, getTemporalTrends } from '../utils/analytics';
 import { SurveyResponse } from '../types/survey';
 import { BarChart3, Download, Users, TrendingUp, RefreshCw } from 'lucide-react';
@@ -57,11 +57,17 @@ export const Dashboard: React.FC<DashboardProps> = ({ onStartSurvey }) => {
 
   const handleExportCSV = () => {
     try {
-      const exportedCount = exportToCSV();
-      showToast(
-        `✅ Dados exportados com sucesso! ${exportedCount} respostas foram salvas em CSV.`,
-        'success'
-      );
+      exportToCSV().then(exportedCount => {
+        showToast(
+          `✅ Dados exportados com sucesso! ${exportedCount} respostas foram salvas em CSV.`,
+          'success'
+        );
+      }).catch(error => {
+        showToast(
+          '❌ Erro ao exportar: Nenhum dado disponível para exportar.',
+          'error'
+        );
+      });
     } catch (error) {
       showToast(
         '❌ Erro ao exportar: Nenhum dado disponível para exportar.',
