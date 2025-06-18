@@ -131,16 +131,16 @@ export const Dashboard: React.FC<DashboardProps> = ({ onStartSurvey }) => {
         backgroundColor: [
           '#dc2626',
           '#eab308',
-          '#374151',
+          '#f97316',  // Não-binário - Laranja
           '#6b7280',
-          '#fbbf24'
+          '#3b82f6'   // Outro - Azul
         ],
         borderColor: [
           '#b91c1c',
           '#ca8a04',
-          '#1f2937',
+          '#ea580c',  // Não-binário
           '#4b5563',
-          '#f59e0b'
+          '#2563eb'   // Outro
         ],
         borderWidth: 2,
       },
@@ -153,8 +153,20 @@ export const Dashboard: React.FC<DashboardProps> = ({ onStartSurvey }) => {
       {
         label: 'Respostas Diárias',
         data: Object.keys(temporalTrends).sort().map(date => temporalTrends[date]),
-        borderColor: 'rgb(220, 38, 38)',
-        backgroundColor: 'rgba(220, 38, 38, 0.1)',
+        backgroundColor: [
+          '#10b981',  // 18-25 - Verde claro
+          '#059669',  // 26-35 - Verde médio
+          '#047857',  // 36-45 - Verde
+          '#065f46',  // 46-55 - Verde escuro
+          '#064e3b'   // 56+ - Verde muito escuro
+        ],
+        borderColor: [
+          '#059669',  // 18-25
+          '#047857',  // 26-35
+          '#065f46',  // 36-45
+          '#064e3b',  // 46-55
+          '#052e16'   // 56+
+        ],
         tension: 0.4,
         fill: true,
       },
