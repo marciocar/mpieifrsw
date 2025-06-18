@@ -1,4 +1,4 @@
-# 🎓 Oficina de DesEnvolvimento com IA - MPIE IFRS
+# 🎓 Oficina de ~~Des~~Envolvimento com IA - MPIE IFRS
 
 ![Oficina de DesEnvolvimento com IA](./assets/oficina-de-des-envolvimento-com-IA.png)
 
