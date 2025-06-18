@@ -104,7 +104,9 @@ export const SurveyWizard: React.FC<SurveyWizardProps> = ({ onComplete }) => {
   const currentQuestion = questions[currentStep - 1];
 
   const updateFormData = (field: keyof SurveyFormData, value: any) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    const newFormData = { ...formData, [field]: value };
+    setFormData(newFormData);
+    
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: '' }));
     }
@@ -118,8 +120,12 @@ export const SurveyWizard: React.FC<SurveyWizardProps> = ({ onComplete }) => {
       
       // Delay para dar feedback visual da seleção
       setTimeout(() => {
-        if (validateCurrentStep()) {
+        // Validar com os novos dados
+        const error = currentQuestion.validation?.(value);
+        if (!error) {
           setCurrentStep(prev => prev + 1);
+        } else {
+          setErrors({ [field]: error });
         }
         setIsAutoAdvancing(false);
       }, 600);
