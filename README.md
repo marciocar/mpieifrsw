@@ -16,6 +16,26 @@ Esta oficina foi possível graças ao convite dos **professores excepcionais** d
 
 O **MPIE - Mestrado Profissional em Informática na Educação** do IFRS não é apenas um programa acadêmico, é uma **comunidade transformadora** que forma profissionais capazes de revolucionar a educação através da tecnologia.
 
+### 🎓 **Sobre o MPIE**
+
+**MPIE - Mestrado Profissional em Informática na Educação - IFRS**
+
+O Mestrado Profissional em Informática na Educação tem por objetivo geral qualificar profissionais para atuarem no campo interdisciplinar das tecnologias de informação e comunicação aplicadas à educação, a partir da imersão na pesquisa.
+
+🌐 **Site oficial:** [https://mpie.poa.ifrs.edu.br/](https://mpie.poa.ifrs.edu.br/)
+
+### 🏛️ **Instituto Federal do Rio Grande do Sul - Campus Porto Alegre**
+
+**Instituto Federal de Educação, Ciência e Tecnologia do Rio Grande do Sul – Campus Porto Alegre**
+
+📍 **Endereço:** Rua Cel. Vicente, 281 | Bairro Centro Histórico | CEP: 90.030-041 | Porto Alegre/RS
+
+📧 **E-mail:** comunicacao@poa.ifrs.edu.br
+
+📞 **Telefone:** (51) 3930-6002
+
+🌐 **Site:** [https://poa.ifrs.edu.br/](https://poa.ifrs.edu.br/)
+
 ### 🌟 **Por que o MPIE é Especial:**
 - 🎯 **Foco na Prática**: Cada projeto tem aplicação real no mundo educacional
 - 👥 **Corpo Docente Excepcional**: Professores que são referência nacional e internacional
