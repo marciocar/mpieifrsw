@@ -144,46 +144,50 @@ export const SharedView: React.FC<SharedViewProps> = ({ shareData, onViewFullDas
                 </p>
               </div>
             </div>
+            <button
+              onClick={onViewFullDashboard}
+              className="inline-flex items-center px-6 py-3 text-white bg-gradient-to-r from-red-600 to-red-700 rounded-lg hover:from-red-700 hover:to-red-800 transition-all duration-200 shadow-lg"
+            >
+              <ExternalLink className="w-4 h-4 mr-2" />
+              Ver Painel Completo
+            </button>
+          </div>
+        )}
+
+        <div className="bg-blue-50 rounded-lg p-4">
+          <h4 className="font-semibold text-blue-800 mb-2">📈 Evolução desde o compartilhamento:</h4>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+            <div className="text-center">
+              <div className="text-lg font-bold text-blue-600">
+                +{currentResponses.length - shareData.totalResponses}
+              </div>
+              <div className="text-blue-700">Novas Respostas</div>
+            </div>
+            <div className="text-center">
+              <div className="text-lg font-bold text-green-600">
+                {Math.round(((currentDistribution.positive / currentResponses.length) * 100))}%
+              </div>
+              <div className="text-green-700">Impacto Positivo Atual</div>
+            </div>
+            <div className="text-center">
+              <div className="text-lg font-bold text-purple-600">
+                {Math.round(((currentResponses.length - shareData.totalResponses) / shareData.totalResponses) * 100)}%
+              </div>
+              <div className="text-purple-700">Crescimento</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Botões de Ação */}
+        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
           <button
             onClick={onViewFullDashboard}
-            className="inline-flex items-center px-6 py-3 text-white bg-gradient-to-r from-red-600 to-red-700 rounded-lg hover:from-red-700 hover:to-red-800 transition-all duration-200 shadow-lg"
+            className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-3 text-white bg-gradient-to-r from-red-600 to-red-700 rounded-lg hover:from-red-700 hover:to-red-800 transition-all duration-200 shadow-lg"
           >
             <ExternalLink className="w-4 h-4 mr-2" />
             Ver Painel Completo
           </button>
-        </div>
 
-            <div className="bg-blue-50 rounded-lg p-4">
-              <h4 className="font-semibold text-blue-800 mb-2">📈 Evolução desde o compartilhamento:</h4>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-                <div className="text-center">
-                  <div className="text-lg font-bold text-blue-600">
-                    +{currentResponses.length - shareData.totalResponses}
-                  </div>
-                  <div className="text-blue-700">Novas Respostas</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-lg font-bold text-green-600">
-                    {Math.round(((currentDistribution.positive / currentResponses.length) * 100))}%
-                  </div>
-                  <div className="text-green-700">Impacto Positivo Atual</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-lg font-bold text-purple-600">
-                    {Math.round(((currentResponses.length - shareData.totalResponses) / shareData.totalResponses) * 100)}%
-                  </div>
-                  <div className="text-purple-700">Crescimento</div>
-                </div>
-        {/* Botões de Ação */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
-              </div>
-            </div>
-            className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-3 text-white bg-gradient-to-r from-red-600 to-red-700 rounded-lg hover:from-red-700 hover:to-red-800 transition-all duration-200 shadow-lg"
-        )}
-        <div className="mt-8 text-center text-sm text-gray-500">
-          <p>Esta é uma visualização compartilhada dos resultados da pesquisa.</p>
-          <p>Para ver análises detalhadas e gráficos interativos, acesse o painel completo.</p>
-          
           {onStartSurvey && (
             <button
               onClick={onStartSurvey}
@@ -191,6 +195,14 @@ export const SharedView: React.FC<SharedViewProps> = ({ shareData, onViewFullDas
             >
               <Users className="w-4 h-4 mr-2" />
               Fazer Pesquisa
+            </button>
+          )}
+        </div>
+
+        <div className="mt-8 text-center text-sm text-gray-500">
+          <p>Esta é uma visualização compartilhada dos resultados da pesquisa.</p>
+          <p>Para ver análises detalhadas e gráficos interativos, acesse o painel completo.</p>
+          
           <div className="bg-gray-50 rounded-lg p-4 max-w-2xl mx-auto">
             <p className="font-medium text-gray-700 mb-2">📊 Sobre esta visualização:</p>
             <ul className="text-left space-y-1">
