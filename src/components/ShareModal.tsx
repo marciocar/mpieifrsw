@@ -38,19 +38,40 @@ export const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, shareDa
   };
 
   const handleSendEmail = () => {
-    const subject = encodeURIComponent('Resultados da Pesquisa de Impacto dos Emojis');
-    const body = encodeURIComponent(
-      `Olá!\n\nGostaria de compartilhar os resultados da nossa pesquisa sobre o impacto dos emojis na comunicação digital:\n\n` +
-      `📊 Total de Respostas: ${shareData.totalResponses}\n` +
-      `✅ Impacto Positivo: ${shareData.positiveImpact}\n` +
-      `⚪ Impacto Neutro: ${shareData.neutralImpact}\n` +
-      `❌ Impacto Negativo: ${shareData.negativeImpact}\n\n` +
-      `Veja os resultados completos em: ${shareUrl}\n\n` +
-      `Atenciosamente,\nEquipe de Pesquisa`
-    );
+    if (!email.trim()) {
+      alert('Por favor, digite um email válido.');
+      return;
+    }
 
-    const mailtoUrl = `mailto:${email}?subject=${subject}&body=${body}`;
-    window.location.href = mailtoUrl;
+    try {
+      const subject = encodeURIComponent('Resultados da Pesquisa de Impacto dos Emojis');
+      const body = encodeURIComponent(
+        `Olá!\n\nGostaria de compartilhar os resultados da nossa pesquisa sobre o impacto dos emojis na comunicação digital:\n\n` +
+        `📊 Total de Respostas: ${shareData.totalResponses}\n` +
+        `✅ Impacto Positivo: ${shareData.positiveImpact}\n` +
+        `⚪ Impacto Neutro: ${shareData.neutralImpact}\n` +
+        `❌ Impacto Negativo: ${shareData.negativeImpact}\n\n` +
+        `Veja os resultados completos em: ${shareUrl}\n\n` +
+        `Atenciosamente,\nEquipe de Pesquisa`
+      );
+
+      const mailtoUrl = `mailto:${email}?subject=${subject}&body=${body}`;
+      
+      // Tentar abrir o cliente de email
+      const link = document.createElement('a');
+      link.href = mailtoUrl;
+      link.target = '_blank';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      // Mostrar feedback de sucesso
+      alert('Cliente de email aberto! Se não abriu automaticamente, copie o link compartilhável e envie manualmente.');
+      
+    } catch (error) {
+      console.error('Erro ao abrir cliente de email:', error);
+      alert('Não foi possível abrir o cliente de email. Por favor, copie o link compartilhável e envie manualmente.');
+    }
   };
 
   if (!isOpen) return null;
@@ -126,8 +147,13 @@ export const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, shareDa
           {/* Envio por Email */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Enviar por Email:
+              Compartilhar por Email:
             </label>
+            <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-3">
+              <p className="text-sm text-amber-700">
+                💡 <strong>Como funciona:</strong> Ao clicar em "Abrir Email", seu cliente de email padrão será aberto com uma mensagem pré-formatada. Se não funcionar, copie o link acima e envie manualmente.
+              </p>
+            </div>
             <div className="space-y-3">
               <input
                 type="email"
@@ -142,7 +168,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, shareDa
                 className="w-full flex items-center justify-center px-4 py-3 bg-gradient-to-r from-yellow-500 to-yellow-600 text-white rounded-lg hover:from-yellow-600 hover:to-yellow-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
               >
                 <Mail className="w-4 h-4 mr-2" />
-                Enviar por Email
+                Abrir Cliente de Email
               </button>
             </div>
           </div>
@@ -155,6 +181,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, shareDa
               <li>• Qualquer pessoa pode visualizar os dados compartilhados</li>
               <li>• Os dados são atualizados em tempo real no painel</li>
               <li>• Ideal para compartilhar com colegas e supervisores</li>
+              <li>• Para email: funciona melhor com Outlook, Gmail ou Apple Mail instalados</li>
             </ul>
           </div>
         </div>
