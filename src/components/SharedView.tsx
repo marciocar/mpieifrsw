@@ -1,8 +1,8 @@
 import React from 'react';
-import { BarChart3, Users, TrendingUp, ExternalLink, FileText, AlertCircle } from 'lucide-react';
+import { BarChart3, Users, TrendingUp, ExternalLink, FileText, AlertCircle, Target, Award, Clock, PieChart } from 'lucide-react';
 import { generateShareableReport } from '../utils/shareUtils';
 import { getResponses } from '../utils/storage';
-import { getResponseDistribution } from '../utils/analytics';
+import { getResponseDistribution, getAgeGroupDistribution, getGenderDistribution } from '../utils/analytics';
 
 interface SharedViewProps {
   shareData: {
@@ -79,36 +79,56 @@ export const SharedView: React.FC<SharedViewProps> = ({ shareData, onViewFullDas
   // Obter dados atuais para comparação (com tratamento de erro)
   let currentResponses = [];
   let currentDistribution = { positive: 0, neutral: 0, negative: 0 };
+  let currentAgeDistribution = {};
+  let currentGenderDistribution = {};
   
   try {
     currentResponses = getResponses() || [];
     currentDistribution = getResponseDistribution(currentResponses);
+    currentAgeDistribution = getAgeGroupDistribution(currentResponses);
+    currentGenderDistribution = getGenderDistribution(currentResponses);
   } catch (error) {
     console.error('Erro ao carregar dados atuais:', error);
   }
 
-  // Calcular métricas de crescimento
+  // Calcular métricas avançadas
   const hasNewData = currentResponses.length !== shareData.totalResponses;
   const newResponses = currentResponses.length - shareData.totalResponses;
   const growthPercentage = shareData.totalResponses > 0 
     ? Math.round((Math.abs(newResponses) / shareData.totalResponses) * 100) 
     : 0;
 
-  // Calcular percentuais atuais (com proteção contra divisão por zero)
+  // Calcular percentuais atuais e compartilhados
+  const sharedPositivePercentage = shareData.totalResponses > 0 
+    ? Math.round((shareData.positiveImpact / shareData.totalResponses) * 100)
+    : 0;
+  
   const currentPositivePercentage = currentResponses.length > 0 
     ? Math.round((currentDistribution.positive / currentResponses.length) * 100)
-    : shareData.totalResponses > 0 
-      ? Math.round((shareData.positiveImpact / shareData.totalResponses) * 100)
-      : 0;
+    : sharedPositivePercentage;
 
   // Calcular diferenças específicas
   const positiveChange = currentDistribution.positive - shareData.positiveImpact;
   const neutralChange = currentDistribution.neutral - shareData.neutralImpact;
   const negativeChange = currentDistribution.negative - shareData.negativeImpact;
 
+  // Calcular insights avançados
+  const dominantImpact = shareData.positiveImpact > shareData.neutralImpact && shareData.positiveImpact > shareData.negativeImpact 
+    ? 'positivo' 
+    : shareData.neutralImpact > shareData.negativeImpact 
+      ? 'neutro' 
+      : 'negativo';
+
+  const confidenceLevel = shareData.totalResponses >= 30 ? 'Alta' : shareData.totalResponses >= 10 ? 'Média' : 'Baixa';
+  
+  // Calcular tendência
+  const positiveTrend = currentPositivePercentage > sharedPositivePercentage ? 'crescente' : 
+                       currentPositivePercentage < sharedPositivePercentage ? 'decrescente' : 'estável';
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-yellow-50 p-4">
-      <div className="max-w-4xl mx-auto py-8">
+      <div className="max-w-6xl mx-auto py-8">
+        {/* Header Profissional */}
         <div className="text-center mb-8">
           <div className="flex items-center justify-center mb-4">
             <BarChart3 className="w-8 h-8 text-red-600 mr-3" />
@@ -117,14 +137,62 @@ export const SharedView: React.FC<SharedViewProps> = ({ shareData, onViewFullDas
             </h1>
           </div>
           <p className="text-gray-600 mb-2">{report.summary}</p>
-          <p className="text-sm text-gray-500">Gerado em: {report.generatedAt}</p>
+          <div className="flex items-center justify-center space-x-4 text-sm text-gray-500">
+            <span className="flex items-center">
+              <Clock className="w-4 h-4 mr-1" />
+              {report.generatedAt}
+            </span>
+            <span className="flex items-center">
+              <Target className="w-4 h-4 mr-1" />
+              Confiabilidade: {confidenceLevel}
+            </span>
+          </div>
+        </div>
+
+        {/* Resumo Executivo */}
+        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl shadow-lg p-8 mb-8">
+          <div className="flex items-center mb-6">
+            <Award className="w-6 h-6 text-blue-600 mr-3" />
+            <h2 className="text-xl font-semibold text-gray-800">Resumo Executivo</h2>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="bg-white rounded-lg p-6 text-center shadow-sm">
+              <div className="text-3xl font-bold text-blue-600 mb-2">{dominantImpact}</div>
+              <div className="text-sm text-gray-600">Percepção Dominante</div>
+              <div className="text-xs text-gray-500 mt-1">
+                {sharedPositivePercentage}% dos respondentes
+              </div>
+            </div>
+            
+            <div className="bg-white rounded-lg p-6 text-center shadow-sm">
+              <div className="text-3xl font-bold text-green-600 mb-2">{confidenceLevel}</div>
+              <div className="text-sm text-gray-600">Nível de Confiança</div>
+              <div className="text-xs text-gray-500 mt-1">
+                Base: {shareData.totalResponses} respostas
+              </div>
+            </div>
+            
+            <div className="bg-white rounded-lg p-6 text-center shadow-sm">
+              <div className={`text-3xl font-bold mb-2 ${
+                positiveTrend === 'crescente' ? 'text-green-600' : 
+                positiveTrend === 'decrescente' ? 'text-red-600' : 'text-gray-600'
+              }`}>
+                {positiveTrend}
+              </div>
+              <div className="text-sm text-gray-600">Tendência Atual</div>
+              <div className="text-xs text-gray-500 mt-1">
+                Impacto positivo {positiveTrend}
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Dados Compartilhados */}
         <div className="bg-white rounded-xl shadow-lg p-8 mb-6">
           <div className="flex items-center mb-6">
             <FileText className="w-6 h-6 text-blue-600 mr-3" />
-            <h2 className="text-xl font-semibold text-gray-800">Dados Compartilhados</h2>
+            <h2 className="text-xl font-semibold text-gray-800">Dados do Snapshot</h2>
             <span className="ml-auto text-sm text-gray-500 bg-blue-50 px-3 py-1 rounded-full">
               Snapshot: {shareData.totalResponses} {shareData.totalResponses === 1 ? 'resposta' : 'respostas'}
             </span>
@@ -141,39 +209,51 @@ export const SharedView: React.FC<SharedViewProps> = ({ shareData, onViewFullDas
               <TrendingUp className="w-8 h-8 text-yellow-600 mx-auto mb-3" />
               <p className="text-2xl font-bold text-yellow-600">{shareData.positiveImpact}</p>
               <p className="text-gray-600 text-sm">Impacto Positivo</p>
+              <p className="text-xs text-yellow-700 mt-1">{sharedPositivePercentage}%</p>
             </div>
             
             <div className="bg-gray-50 rounded-lg p-6 text-center">
               <BarChart3 className="w-8 h-8 text-gray-600 mx-auto mb-3" />
               <p className="text-2xl font-bold text-gray-600">{shareData.neutralImpact}</p>
               <p className="text-gray-600 text-sm">Impacto Neutro</p>
+              <p className="text-xs text-gray-700 mt-1">
+                {shareData.totalResponses > 0 ? Math.round((shareData.neutralImpact / shareData.totalResponses) * 100) : 0}%
+              </p>
             </div>
             
             <div className="bg-red-50 rounded-lg p-6 text-center">
               <TrendingUp className="w-8 h-8 text-red-600 mx-auto mb-3 transform rotate-180" />
               <p className="text-2xl font-bold text-red-600">{shareData.negativeImpact}</p>
               <p className="text-gray-600 text-sm">Impacto Negativo</p>
+              <p className="text-xs text-red-700 mt-1">
+                {shareData.totalResponses > 0 ? Math.round((shareData.negativeImpact / shareData.totalResponses) * 100) : 0}%
+              </p>
             </div>
           </div>
 
+          {/* Análise Visual dos Percentuais */}
           {shareData.totalResponses > 0 && (
             <div className="space-y-4 mb-6">
-              <h3 className="text-lg font-semibold text-gray-800">Distribuição Percentual (Dados Compartilhados):</h3>
+              <h3 className="text-lg font-semibold text-gray-800 flex items-center">
+                <PieChart className="w-5 h-5 mr-2" />
+                Distribuição Percentual (Snapshot):
+              </h3>
               {report.metrics.map((metric, index) => (
                 <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
                   <span className="font-medium text-gray-700">{metric.label}</span>
                   <div className="flex items-center space-x-4">
-                    <div className="w-32 bg-gray-200 rounded-full h-2">
+                    <div className="w-40 bg-gray-200 rounded-full h-3">
                       <div
-                        className={`h-2 rounded-full ${
-                          metric.label.includes('Positivo') ? 'bg-yellow-500' :
-                          metric.label.includes('Neutro') ? 'bg-gray-500' : 'bg-red-500'
+                        className={`h-3 rounded-full transition-all duration-500 ${
+                          metric.label.includes('Positivo') ? 'bg-gradient-to-r from-yellow-400 to-yellow-500' :
+                          metric.label.includes('Neutro') ? 'bg-gradient-to-r from-gray-400 to-gray-500' : 
+                          'bg-gradient-to-r from-red-400 to-red-500'
                         }`}
                         style={{ width: `${Math.max(0, Math.min(100, metric.percentage))}%` }}
                       />
                     </div>
-                    <span className="font-bold text-gray-800 w-12 text-right">
-                      {metric.percentage}%
+                    <span className="font-bold text-gray-800 w-16 text-right">
+                      {metric.value} ({metric.percentage}%)
                     </span>
                   </div>
                 </div>
@@ -187,7 +267,7 @@ export const SharedView: React.FC<SharedViewProps> = ({ shareData, onViewFullDas
           <div className="bg-white rounded-xl shadow-lg p-8 mb-6">
             <div className="flex items-center mb-6">
               <BarChart3 className={`w-6 h-6 mr-3 ${newResponses >= 0 ? 'text-green-600' : 'text-orange-600'}`} />
-              <h2 className="text-xl font-semibold text-gray-800">Dados Atuais (Comparativo)</h2>
+              <h2 className="text-xl font-semibold text-gray-800">Comparativo: Snapshot vs. Atual</h2>
               <span className="ml-auto text-sm text-gray-500 bg-green-50 px-3 py-1 rounded-full">
                 Atual: {currentResponses.length} {currentResponses.length === 1 ? 'resposta' : 'respostas'}
               </span>
@@ -198,7 +278,7 @@ export const SharedView: React.FC<SharedViewProps> = ({ shareData, onViewFullDas
                 <Users className="w-8 h-8 text-red-600 mx-auto mb-3" />
                 <p className="text-2xl font-bold text-gray-800">{currentResponses.length}</p>
                 <p className="text-gray-600 text-sm">Total de Respostas</p>
-                <p className={`text-xs mt-1 ${newResponses >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                <p className={`text-xs mt-1 font-medium ${newResponses >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                   {newResponses >= 0 ? '+' : ''}{newResponses} {Math.abs(newResponses) === 1 ? 'resposta' : 'respostas'}
                 </p>
               </div>
@@ -207,8 +287,8 @@ export const SharedView: React.FC<SharedViewProps> = ({ shareData, onViewFullDas
                 <TrendingUp className="w-8 h-8 text-yellow-600 mx-auto mb-3" />
                 <p className="text-2xl font-bold text-yellow-600">{currentDistribution.positive}</p>
                 <p className="text-gray-600 text-sm">Impacto Positivo</p>
-                <p className={`text-xs mt-1 ${positiveChange >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                  {positiveChange >= 0 ? '+' : ''}{positiveChange}
+                <p className={`text-xs mt-1 font-medium ${positiveChange >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                  {positiveChange >= 0 ? '+' : ''}{positiveChange} ({currentPositivePercentage}%)
                 </p>
               </div>
               
@@ -216,7 +296,7 @@ export const SharedView: React.FC<SharedViewProps> = ({ shareData, onViewFullDas
                 <BarChart3 className="w-8 h-8 text-gray-600 mx-auto mb-3" />
                 <p className="text-2xl font-bold text-gray-600">{currentDistribution.neutral}</p>
                 <p className="text-gray-600 text-sm">Impacto Neutro</p>
-                <p className={`text-xs mt-1 ${neutralChange >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                <p className={`text-xs mt-1 font-medium ${neutralChange >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                   {neutralChange >= 0 ? '+' : ''}{neutralChange}
                 </p>
               </div>
@@ -225,13 +305,52 @@ export const SharedView: React.FC<SharedViewProps> = ({ shareData, onViewFullDas
                 <TrendingUp className="w-8 h-8 text-red-600 mx-auto mb-3 transform rotate-180" />
                 <p className="text-2xl font-bold text-red-600">{currentDistribution.negative}</p>
                 <p className="text-gray-600 text-sm">Impacto Negativo</p>
-                <p className={`text-xs mt-1 ${negativeChange >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                <p className={`text-xs mt-1 font-medium ${negativeChange >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                   {negativeChange >= 0 ? '+' : ''}{negativeChange}
                 </p>
               </div>
             </div>
           </div>
         )}
+
+        {/* Insights e Recomendações */}
+        <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl shadow-lg p-8 mb-8">
+          <div className="flex items-center mb-6">
+            <Target className="w-6 h-6 text-green-600 mr-3" />
+            <h2 className="text-xl font-semibold text-gray-800">Insights e Recomendações</h2>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="bg-white rounded-lg p-6">
+              <h4 className="font-semibold text-green-800 mb-3">📊 Análise dos Dados:</h4>
+              <ul className="text-sm text-green-700 space-y-2">
+                <li>• <strong>Percepção dominante:</strong> {dominantImpact} ({sharedPositivePercentage}%)</li>
+                <li>• <strong>Confiabilidade:</strong> {confidenceLevel} (n={shareData.totalResponses})</li>
+                <li>• <strong>Tendência:</strong> Impacto positivo {positiveTrend}</li>
+                {shareData.totalResponses >= 30 && (
+                  <li>• <strong>Significância:</strong> Amostra estatisticamente relevante</li>
+                )}
+              </ul>
+            </div>
+            
+            <div className="bg-white rounded-lg p-6">
+              <h4 className="font-semibold text-blue-800 mb-3">🎯 Recomendações:</h4>
+              <ul className="text-sm text-blue-700 space-y-2">
+                {shareData.totalResponses < 30 && (
+                  <li>• Aumentar amostra para maior confiabilidade</li>
+                )}
+                {sharedPositivePercentage > 60 && (
+                  <li>• Explorar fatores que contribuem para percepção positiva</li>
+                )}
+                {sharedPositivePercentage < 40 && (
+                  <li>• Investigar barreiras à aceitação dos emojis</li>
+                )}
+                <li>• Segmentar análise por faixa etária e contexto</li>
+                <li>• Considerar estudos longitudinais</li>
+              </ul>
+            </div>
+          </div>
+        </div>
 
         {/* Evolução desde o compartilhamento */}
         <div className="bg-blue-50 rounded-lg p-6 mb-8">
@@ -279,25 +398,50 @@ export const SharedView: React.FC<SharedViewProps> = ({ shareData, onViewFullDas
               className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-3 text-red-700 bg-red-50 border-2 border-red-300 rounded-lg hover:bg-red-100 hover:border-red-400 transition-all duration-200"
             >
               <Users className="w-4 h-4 mr-2" />
-              Fazer Pesquisa
+              Contribuir com Pesquisa
             </button>
           )}
         </div>
 
+        {/* Metodologia e Limitações */}
         <div className="mt-8 text-center text-sm text-gray-500">
-          <p>Esta é uma visualização compartilhada dos resultados da pesquisa.</p>
-          <p>Para ver análises detalhadas e gráficos interativos, acesse o painel completo.</p>
-          
-          <div className="bg-gray-50 rounded-lg p-4 max-w-2xl mx-auto mt-4">
-            <p className="font-medium text-gray-700 mb-2">📊 Sobre esta visualização:</p>
-            <ul className="text-left space-y-1">
-              <li>• <strong>Dados Compartilhados:</strong> Snapshot dos resultados no momento do compartilhamento</li>
-              {hasNewData && (
-                <li>• <strong>Dados Atuais:</strong> Resultados atualizados em tempo real</li>
-              )}
-              <li>• <strong>Painel Completo:</strong> Gráficos interativos, análises detalhadas e exportação</li>
-              <li>• <strong>Participar:</strong> Contribua com sua resposta para enriquecer a pesquisa</li>
-            </ul>
+          <div className="bg-gray-50 rounded-lg p-6 max-w-4xl mx-auto">
+            <h4 className="font-medium text-gray-700 mb-4">📋 Sobre esta Análise:</h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
+              <div>
+                <p className="font-medium text-gray-700 mb-2">🔬 Metodologia:</p>
+                <ul className="space-y-1">
+                  <li>• Análise quantitativa de percepções sobre emojis</li>
+                  <li>• Amostragem por conveniência</li>
+                  <li>• Dados coletados via questionário estruturado</li>
+                  <li>• Análise descritiva e comparativa</li>
+                </ul>
+              </div>
+              <div>
+                <p className="font-medium text-gray-700 mb-2">⚠️ Limitações:</p>
+                <ul className="space-y-1">
+                  <li>• Amostra não probabilística</li>
+                  <li>• Dados auto-reportados</li>
+                  <li>• Análise limitada a percepções declaradas</li>
+                  <li>• Contexto temporal específico</li>
+                </ul>
+              </div>
+            </div>
+            
+            <div className="mt-6 pt-4 border-t border-gray-200">
+              <p className="font-medium text-gray-700 mb-2">🎯 Funcionalidades Disponíveis:</p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                <div>
+                  <strong>Snapshot:</strong> Dados no momento do compartilhamento
+                </div>
+                <div>
+                  <strong>Comparativo:</strong> Evolução em tempo real
+                </div>
+                <div>
+                  <strong>Painel Completo:</strong> Análises detalhadas e exportação
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
