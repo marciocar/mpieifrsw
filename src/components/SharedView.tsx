@@ -88,10 +88,10 @@ export const SharedView: React.FC<SharedViewProps> = ({ shareData, onViewFullDas
   }
 
   // Calcular métricas de crescimento
-  const hasGrowth = currentResponses.length > shareData.totalResponses;
-  const newResponses = Math.max(0, currentResponses.length - shareData.totalResponses);
+  const hasNewData = currentResponses.length !== shareData.totalResponses;
+  const newResponses = currentResponses.length - shareData.totalResponses;
   const growthPercentage = shareData.totalResponses > 0 
-    ? Math.round((newResponses / shareData.totalResponses) * 100) 
+    ? Math.round((Math.abs(newResponses) / shareData.totalResponses) * 100) 
     : 0;
 
   // Calcular percentuais atuais (com proteção contra divisão por zero)
@@ -100,6 +100,11 @@ export const SharedView: React.FC<SharedViewProps> = ({ shareData, onViewFullDas
     : shareData.totalResponses > 0 
       ? Math.round((shareData.positiveImpact / shareData.totalResponses) * 100)
       : 0;
+
+  // Calcular diferenças específicas
+  const positiveChange = currentDistribution.positive - shareData.positiveImpact;
+  const neutralChange = currentDistribution.neutral - shareData.neutralImpact;
+  const negativeChange = currentDistribution.negative - shareData.negativeImpact;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-yellow-50 p-4">
@@ -178,10 +183,10 @@ export const SharedView: React.FC<SharedViewProps> = ({ shareData, onViewFullDas
         </div>
 
         {/* Comparativo com Dados Atuais */}
-        {hasGrowth && (
+        {hasNewData && (
           <div className="bg-white rounded-xl shadow-lg p-8 mb-6">
             <div className="flex items-center mb-6">
-              <BarChart3 className="w-6 h-6 text-green-600 mr-3" />
+              <BarChart3 className={`w-6 h-6 mr-3 ${newResponses >= 0 ? 'text-green-600' : 'text-orange-600'}`} />
               <h2 className="text-xl font-semibold text-gray-800">Dados Atuais (Comparativo)</h2>
               <span className="ml-auto text-sm text-gray-500 bg-green-50 px-3 py-1 rounded-full">
                 Atual: {currentResponses.length} {currentResponses.length === 1 ? 'resposta' : 'respostas'}
@@ -193,8 +198,8 @@ export const SharedView: React.FC<SharedViewProps> = ({ shareData, onViewFullDas
                 <Users className="w-8 h-8 text-red-600 mx-auto mb-3" />
                 <p className="text-2xl font-bold text-gray-800">{currentResponses.length}</p>
                 <p className="text-gray-600 text-sm">Total de Respostas</p>
-                <p className="text-xs text-green-600 mt-1">
-                  +{newResponses} {newResponses === 1 ? 'nova' : 'novas'}
+                <p className={`text-xs mt-1 ${newResponses >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                  {newResponses >= 0 ? '+' : ''}{newResponses} {Math.abs(newResponses) === 1 ? 'resposta' : 'respostas'}
                 </p>
               </div>
               
@@ -202,8 +207,8 @@ export const SharedView: React.FC<SharedViewProps> = ({ shareData, onViewFullDas
                 <TrendingUp className="w-8 h-8 text-yellow-600 mx-auto mb-3" />
                 <p className="text-2xl font-bold text-yellow-600">{currentDistribution.positive}</p>
                 <p className="text-gray-600 text-sm">Impacto Positivo</p>
-                <p className="text-xs text-green-600 mt-1">
-                  {currentDistribution.positive >= shareData.positiveImpact ? '+' : ''}{currentDistribution.positive - shareData.positiveImpact}
+                <p className={`text-xs mt-1 ${positiveChange >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                  {positiveChange >= 0 ? '+' : ''}{positiveChange}
                 </p>
               </div>
               
@@ -211,8 +216,8 @@ export const SharedView: React.FC<SharedViewProps> = ({ shareData, onViewFullDas
                 <BarChart3 className="w-8 h-8 text-gray-600 mx-auto mb-3" />
                 <p className="text-2xl font-bold text-gray-600">{currentDistribution.neutral}</p>
                 <p className="text-gray-600 text-sm">Impacto Neutro</p>
-                <p className="text-xs text-green-600 mt-1">
-                  {currentDistribution.neutral >= shareData.neutralImpact ? '+' : ''}{currentDistribution.neutral - shareData.neutralImpact}
+                <p className={`text-xs mt-1 ${neutralChange >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                  {neutralChange >= 0 ? '+' : ''}{neutralChange}
                 </p>
               </div>
               
@@ -220,8 +225,8 @@ export const SharedView: React.FC<SharedViewProps> = ({ shareData, onViewFullDas
                 <TrendingUp className="w-8 h-8 text-red-600 mx-auto mb-3 transform rotate-180" />
                 <p className="text-2xl font-bold text-red-600">{currentDistribution.negative}</p>
                 <p className="text-gray-600 text-sm">Impacto Negativo</p>
-                <p className="text-xs text-green-600 mt-1">
-                  {currentDistribution.negative >= shareData.negativeImpact ? '+' : ''}{currentDistribution.negative - shareData.negativeImpact}
+                <p className={`text-xs mt-1 ${negativeChange >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                  {negativeChange >= 0 ? '+' : ''}{negativeChange}
                 </p>
               </div>
             </div>
@@ -233,10 +238,15 @@ export const SharedView: React.FC<SharedViewProps> = ({ shareData, onViewFullDas
           <h4 className="font-semibold text-blue-800 mb-4">📈 Evolução desde o compartilhamento:</h4>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
             <div className="text-center bg-white rounded-lg p-4">
-              <div className="text-2xl font-bold text-blue-600">
-                +{newResponses}
+              <div className={`text-2xl font-bold ${newResponses >= 0 ? 'text-blue-600' : 'text-orange-600'}`}>
+                {newResponses >= 0 ? '+' : ''}{newResponses}
               </div>
-              <div className="text-blue-700">{newResponses === 1 ? 'Nova Resposta' : 'Novas Respostas'}</div>
+              <div className="text-blue-700">
+                {newResponses === 0 ? 'Sem Mudanças' : 
+                 Math.abs(newResponses) === 1 ? 
+                   (newResponses > 0 ? 'Nova Resposta' : 'Resposta Removida') : 
+                   (newResponses > 0 ? 'Novas Respostas' : 'Respostas Removidas')}
+              </div>
             </div>
             <div className="text-center bg-white rounded-lg p-4">
               <div className="text-2xl font-bold text-green-600">
@@ -245,10 +255,10 @@ export const SharedView: React.FC<SharedViewProps> = ({ shareData, onViewFullDas
               <div className="text-green-700">Impacto Positivo Atual</div>
             </div>
             <div className="text-center bg-white rounded-lg p-4">
-              <div className="text-2xl font-bold text-purple-600">
-                {shareData.totalResponses > 0 ? growthPercentage : 0}%
+              <div className={`text-2xl font-bold ${newResponses >= 0 ? 'text-purple-600' : 'text-orange-600'}`}>
+                {newResponses >= 0 ? '+' : '-'}{growthPercentage}%
               </div>
-              <div className="text-purple-700">Crescimento</div>
+              <div className="text-purple-700">{newResponses >= 0 ? 'Crescimento' : 'Redução'}</div>
             </div>
           </div>
         </div>
@@ -282,7 +292,7 @@ export const SharedView: React.FC<SharedViewProps> = ({ shareData, onViewFullDas
             <p className="font-medium text-gray-700 mb-2">📊 Sobre esta visualização:</p>
             <ul className="text-left space-y-1">
               <li>• <strong>Dados Compartilhados:</strong> Snapshot dos resultados no momento do compartilhamento</li>
-              {hasGrowth && (
+              {hasNewData && (
                 <li>• <strong>Dados Atuais:</strong> Resultados atualizados em tempo real</li>
               )}
               <li>• <strong>Painel Completo:</strong> Gráficos interativos, análises detalhadas e exportação</li>
