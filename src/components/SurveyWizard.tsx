@@ -220,7 +220,11 @@ export const SurveyWizard: React.FC<SurveyWizardProps> = ({ onComplete }) => {
           </p>
         </div>
 
-        <ProgressBar current={currentStep} total={questions.length} />
+        <ProgressBar 
+          current={currentStep} 
+          total={questions.length}
+          isCurrentAnswered={!!formData[currentQuestion.id]}
+        />
 
         <QuestionCard
           question={currentQuestion}
