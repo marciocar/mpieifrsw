@@ -31,8 +31,7 @@ export const clearDraft = (): void => {
 export const exportToCSV = (): void => {
   const responses = getResponses();
   if (responses.length === 0) {
-    alert('Nenhum dado para exportar');
-    return;
+    throw new Error('Nenhum dado disponível para exportar');
   }
 
   const headers = [
@@ -69,4 +68,6 @@ export const exportToCSV = (): void => {
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
+  
+  return responses.length;
 };

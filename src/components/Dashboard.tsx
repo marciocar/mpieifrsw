@@ -16,6 +16,8 @@ import { getResponses, exportToCSV } from '../utils/storage';
 import { getResponseDistribution, getAgeGroupDistribution, getGenderDistribution, getTemporalTrends } from '../utils/analytics';
 import { SurveyResponse } from '../types/survey';
 import { BarChart3, Download, Users, TrendingUp, RefreshCw } from 'lucide-react';
+import { Toast } from './Toast';
+import { useToast } from '../hooks/useToast';
 
 ChartJS.register(
   CategoryScale,
@@ -36,6 +38,7 @@ interface DashboardProps {
 export const Dashboard: React.FC<DashboardProps> = ({ onStartSurvey }) => {
   const [responses, setResponses] = useState<SurveyResponse[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const { toast, showToast, hideToast } = useToast();
 
   const loadData = () => {
     setIsLoading(true);
@@ -49,6 +52,20 @@ export const Dashboard: React.FC<DashboardProps> = ({ onStartSurvey }) => {
     loadData();
   }, []);
 
+  const handleExportCSV = () => {
+    try {
+      const exportedCount = exportToCSV();
+      showToast(
+        `✅ Dados exportados com sucesso! ${exportedCount} respostas foram salvas em CSV.`,
+        'success'
+      );
+    } catch (error) {
+      showToast(
+        '❌ Erro ao exportar: Nenhum dado disponível para exportar.',
+        'error'
+      );
+    }
+  };
   const responseDistribution = getResponseDistribution(responses);
   const ageGroupDistribution = getAgeGroupDistribution(responses);
   const genderDistribution = getGenderDistribution(responses);
@@ -188,7 +205,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onStartSurvey }) => {
               Atualizar
             </button>
             <button
-              onClick={exportToCSV}
+              onClick={handleExportCSV}
               disabled={responses.length === 0}
               className="flex items-center px-4 py-2 text-yellow-600 bg-yellow-50 border border-yellow-300 rounded-lg hover:bg-yellow-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
             >
@@ -305,6 +322,13 @@ export const Dashboard: React.FC<DashboardProps> = ({ onStartSurvey }) => {
           </>
         )}
       </div>
+      
+      <Toast
+        message={toast.message}
+        type={toast.type}
+        isVisible={toast.isVisible}
+        onClose={hideToast}
+      />
     </div>
   );
 };
