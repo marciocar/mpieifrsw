@@ -36,12 +36,24 @@ function App() {
     setCurrentView('dashboard');
     setSharedData(null);
   };
+
+  const handleStartSurveyFromShared = () => {
+    // Remove share parameter from URL
+    const url = new URL(window.location.href);
+    url.searchParams.delete('share');
+    window.history.replaceState({}, '', url.toString());
+    
+    setCurrentView('survey');
+    setSharedData(null);
+  };
+
   return (
     <div className="App">
       {currentView === 'shared' && sharedData ? (
         <SharedView 
           shareData={sharedData} 
           onViewFullDashboard={handleViewFullDashboard}
+          onStartSurvey={handleStartSurveyFromShared}
         />
       ) : currentView === 'dashboard' ? (
         <Dashboard onStartSurvey={handleStartSurvey} />
