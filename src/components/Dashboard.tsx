@@ -241,7 +241,6 @@ export const Dashboard: React.FC<DashboardProps> = ({ onStartSurvey }) => {
                 <span>🔧 v{dbStats.version}</span>
               </div>
             )}
-            </p>
           </div>
           
           <div className="flex flex-wrap gap-3">
