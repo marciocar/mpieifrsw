@@ -1,4 +1,4 @@
-import * as sqlJs from 'sql.js';
+import initSqlJs from 'sql.js/dist/sql-wasm.js';
 import { Database } from 'sql.js';
 import { SurveyResponse, SurveyFormData } from '../types/survey';
 
@@ -15,7 +15,7 @@ const initDatabase = async (): Promise<Database> => {
   
   try {
     // Inicializar sql.js
-    SQL = await sqlJs.default({
+    SQL = await initSqlJs({
       // Carregar o wasm do CDN
       locateFile: (file: string) => `https://sql.js.org/dist/${file}`
     });
