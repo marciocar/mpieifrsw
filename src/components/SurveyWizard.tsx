@@ -197,7 +197,7 @@ export const SurveyWizard: React.FC<SurveyWizardProps> = ({ onComplete }) => {
     
     setTimeout(() => {
       onComplete();
-    }, 2500);
+    }, 5000);
   };
 
   if (isCompleted) {
