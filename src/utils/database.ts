@@ -1,4 +1,4 @@
-import initSqlJs from 'sql.js';
+import { initSqlJs } from 'sql.js';
 import { Database } from 'sql.js';
 import { SurveyResponse, SurveyFormData } from '../types/survey';
 
