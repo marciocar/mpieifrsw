@@ -56,8 +56,11 @@ const questions: QuestionConfig[] = [
     title: 'Qual é a sua idade?',
     type: 'number',
     validation: (value) => {
-      if (!value) return 'Por favor, informe sua idade';
-      if (value < 13 || value > 120) return 'Por favor, informe uma idade válida entre 13 e 120 anos';
+      if (!value || value === '') return 'Por favor, informe sua idade';
+      const numValue = Number(value);
+      if (isNaN(numValue)) return 'Por favor, informe um número válido';
+      if (numValue < 13) return 'Idade mínima permitida: 13 anos';
+      if (numValue > 120) return 'Idade máxima permitida: 120 anos';
       return null;
     }
   },
@@ -123,12 +126,20 @@ export const SurveyWizard: React.FC<SurveyWizardProps> = ({ onComplete }) => {
     const newFormData = { ...formData, [field]: value };
     setFormData(newFormData);
     
-    if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: '' }));
+    // Limpar erro anterior
+    setErrors(prev => ({ ...prev, [field]: '' }));
+    
+    // Validar imediatamente para campos de número
+    const currentQuestion = questions[currentStep - 1];
+    if (currentQuestion.type === 'number' && value !== '') {
+      const error = currentQuestion.validation?.(value);
+      if (error) {
+        setErrors(prev => ({ ...prev, [field]: error }));
+        return; // Não fazer auto-advance se há erro
+      }
     }
     
     // Auto-advance para perguntas de radio e select (exceto a última pergunta)
-    const currentQuestion = questions[currentStep - 1];
     const isLastStep = currentStep === questions.length;
     
     if ((currentQuestion.type === 'radio' || currentQuestion.type === 'select') && !isLastStep) {
@@ -154,11 +165,12 @@ export const SurveyWizard: React.FC<SurveyWizardProps> = ({ onComplete }) => {
     const error = question.validation?.(value);
     
     if (error) {
-      setErrors({ [question.id]: error });
+      setErrors(prev => ({ ...prev, [question.id]: error }));
       return false;
     }
     
-    setErrors({});
+    // Limpar apenas o erro da pergunta atual
+    setErrors(prev => ({ ...prev, [question.id]: '' }));
     return true;
   };
 

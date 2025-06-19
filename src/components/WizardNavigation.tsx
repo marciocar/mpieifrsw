@@ -47,7 +47,11 @@ export const WizardNavigation: React.FC<WizardNavigationProps> = ({
         <button
           onClick={onSubmit}
           disabled={!canGoNext || isSubmitting || isAutoAdvancing}
-          className="flex items-center px-8 py-3 text-white bg-gradient-to-r from-yellow-500 to-yellow-600 rounded-lg hover:from-yellow-600 hover:to-yellow-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg"
+          className={`flex items-center px-8 py-3 text-white rounded-lg transition-all duration-200 shadow-lg ${
+            canGoNext && !isSubmitting && !isAutoAdvancing
+              ? 'bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700'
+              : 'bg-gray-400 cursor-not-allowed'
+          }`}
         >
           {isSubmitting ? (
             <>
@@ -65,7 +69,11 @@ export const WizardNavigation: React.FC<WizardNavigationProps> = ({
         <button
           onClick={onNext}
           disabled={!canGoNext || isAutoAdvancing}
-          className="flex items-center px-6 py-3 text-white bg-gradient-to-r from-red-600 to-red-700 rounded-lg hover:from-red-700 hover:to-red-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg"
+          className={`flex items-center px-6 py-3 text-white rounded-lg transition-all duration-200 shadow-lg ${
+            canGoNext && !isAutoAdvancing
+              ? 'bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800'
+              : 'bg-gray-400 cursor-not-allowed'
+          }`}
         >
           {isAutoAdvancing ? 'Avançando...' : 'Próximo'}
           <ChevronRight className="w-4 h-4 ml-2" />

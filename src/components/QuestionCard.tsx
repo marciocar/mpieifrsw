@@ -55,15 +55,33 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
 
       case 'number':
         return (
-          <input
-            type="number"
-            value={value || ''}
-            onChange={(e) => onChange(parseInt(e.target.value))}
-            className="w-full p-4 border-2 border-gray-200 rounded-lg focus:border-red-500 focus:ring-2 focus:ring-red-200 transition-all duration-200"
-            placeholder="Digite sua idade"
-            min="13"
-            max="120"
-          />
+          <div>
+            <input
+              type="number"
+              value={value || ''}
+              onChange={(e) => {
+                const inputValue = e.target.value;
+                // Permitir campo vazio ou números
+                if (inputValue === '') {
+                  onChange('');
+                } else {
+                  const numValue = parseInt(inputValue);
+                  onChange(numValue);
+                }
+              }}
+              className={`w-full p-4 border-2 rounded-lg focus:ring-2 focus:ring-red-200 transition-all duration-200 ${
+                error ? 'border-red-500 bg-red-50' : 'border-gray-200 focus:border-red-500'
+              }`}
+              placeholder="Digite sua idade (13-120 anos)"
+              min="13"
+              max="120"
+            />
+            {value && (
+              <div className="mt-2 text-sm text-gray-600">
+                Idade informada: {value} anos
+              </div>
+            )}
+          </div>
         );
 
       case 'select':
