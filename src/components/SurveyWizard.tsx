@@ -89,21 +89,32 @@ export const SurveyWizard: React.FC<SurveyWizardProps> = ({ onComplete }) => {
   const [isAutoAdvancing, setIsAutoAdvancing] = useState(false);
 
   useEffect(() => {
-    getDraft().then(draft => {
-      if (draft) {
-        setFormData(draft);
+    const loadDraft = async () => {
+      try {
+        const draft = await getDraft();
+        if (draft) {
+          setFormData(draft);
+        }
+      } catch (error) {
+        console.error('Erro ao carregar rascunho:', error);
       }
-    }).catch(error => {
-      console.error('Erro ao carregar rascunho:', error);
-    });
+    };
+    
+    loadDraft();
   }, []);
 
   useEffect(() => {
-    if (Object.keys(formData).length > 0) {
-      saveDraft(formData).catch(error => {
-        console.error('Erro ao salvar rascunho:', error);
-      });
-    }
+    const saveDraftData = async () => {
+      if (Object.keys(formData).length > 0) {
+        try {
+          await saveDraft(formData);
+        } catch (error) {
+          console.error('Erro ao salvar rascunho:', error);
+        }
+      }
+    };
+    
+    saveDraftData();
   }, [formData]);
 
   const currentQuestion = questions[currentStep - 1];

@@ -59,6 +59,12 @@ Uma plataforma interativa de pesquisa desenvolvida **durante a oficina** para de
 - **Tailwind CSS** - Framework de estilização
 - **Vite** - Build tool e dev server
 
+### Banco de Dados
+- **SQLite Simulado** - Estrutura de banco relacional
+- **localStorage** - Persistência no navegador
+- **Operações CRUD** - Create, Read, Update, Delete
+- **Validação de Schema** - Integridade dos dados
+
 ### Visualização de Dados
 - **Chart.js** - Biblioteca de gráficos
 - **react-chartjs-2** - Wrapper React para Chart.js
@@ -68,8 +74,8 @@ Uma plataforma interativa de pesquisa desenvolvida **durante a oficina** para de
 - **date-fns** - Manipulação de datas
 
 ### Armazenamento
-- **SQLite** - Banco de dados relacional local
-- **better-sqlite3** - Driver SQLite para Node.js
+- **SQLite** - Banco de dados relacional simulado
+- **localStorage** - Persistência local com estrutura SQL
 - **JSON** - Formato de intercâmbio de dados
 
 ---
@@ -122,12 +128,13 @@ src/
 ├── types/               # Definições TypeScript
 │   └── survey.ts       # Tipos da pesquisa
 ├── utils/              # Utilitários
-│   ├── database.ts     # Gerenciamento SQLite
+│   ├── database.ts     # Simulação SQLite com localStorage
 │   ├── analytics.ts    # Processamento de dados
 │   └── shareUtils.ts   # Utilitários de compartilhamento
 ├── hooks/              # Custom Hooks
 │   └── useToast.ts     # Hook para notificações
 ├── App.tsx             # Componente raiz
+└── main.tsx           # Entry point
 ```
 
 ---

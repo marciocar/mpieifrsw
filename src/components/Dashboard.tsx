@@ -12,10 +12,10 @@ import {
   LineElement,
 } from 'chart.js';
 import { Bar, Pie, Line } from 'react-chartjs-2';
-import { getResponsesSync as getResponses, exportToCSV } from '../utils/database';
+import { getResponsesSync as getResponses, exportToCSV, getDatabaseStats } from '../utils/database';
 import { getResponseDistribution, getAgeGroupDistribution, getGenderDistribution, getTemporalTrends } from '../utils/analytics';
 import { SurveyResponse } from '../types/survey';
-import { BarChart3, Download, Users, TrendingUp, RefreshCw } from 'lucide-react';
+import { BarChart3, Download, Users, TrendingUp, RefreshCw, Database } from 'lucide-react';
 import { Share2 } from 'lucide-react';
 import { Toast } from './Toast';
 import { useToast } from '../hooks/useToast';
@@ -40,6 +40,7 @@ interface DashboardProps {
 export const Dashboard: React.FC<DashboardProps> = ({ onStartSurvey }) => {
   const [responses, setResponses] = useState<SurveyResponse[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [dbStats, setDbStats] = useState<any>(null);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const { toast, showToast, hideToast } = useToast();
 
@@ -47,6 +48,12 @@ export const Dashboard: React.FC<DashboardProps> = ({ onStartSurvey }) => {
     setIsLoading(true);
     setTimeout(() => {
       setResponses(getResponses());
+      // Carregar estatísticas do banco
+      getDatabaseStats().then(stats => {
+        setDbStats(stats);
+      }).catch(error => {
+        console.error('Erro ao carregar estatísticas:', error);
+      });
       setIsLoading(false);
     }, 500);
   };
@@ -219,13 +226,21 @@ export const Dashboard: React.FC<DashboardProps> = ({ onStartSurvey }) => {
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8">
           <div className="mb-4 lg:mb-0">
             <div className="flex items-center mb-2">
-              <BarChart3 className="w-8 h-8 text-red-600 mr-3" />
+              <Database className="w-8 h-8 text-red-600 mr-3" />
               <h1 className="text-3xl font-bold text-gray-800">
-                Painel de Análise da Pesquisa
+                Painel SQLite - Análise da Pesquisa
               </h1>
             </div>
             <p className="text-gray-600">
-              Insights em tempo real sobre uso e percepção de emojis na comunicação digital
+              Banco de dados SQLite com insights em tempo real sobre emojis
+            </p>
+            {dbStats && (
+              <div className="text-xs text-gray-500 mt-2 flex items-center space-x-4">
+                <span>📁 {dbStats.database}</span>
+                <span>📊 {dbStats.total_responses} registros</span>
+                <span>🔧 v{dbStats.version}</span>
+              </div>
+            )}
             </p>
           </div>
           
